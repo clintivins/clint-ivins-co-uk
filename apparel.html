@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="T3chN0mad Apparel - Cyberpunk fashion for the digital frontier. Gear up with exclusive cyber-wear.">
+    <title>Apparel | T3chN0mad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2.3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ======== VIDEO HERO ======== */
+        .shop-hero {
+            height: 100vh;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .shop-hero .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    rgba(10, 10, 15, 0.4) 0%,
+                    rgba(10, 10, 15, 0.6) 50%,
+                    rgba(10, 10, 15, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .shop-hero .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .shop-hero .subtitle {
+            font-size: 1rem;
+            letter-spacing: 5px;
+        }
+
+        .hero-cta {
+            margin-top: 2rem;
+        }
+
+        .hero-cta .btn-glow {
+            font-size: 1.1rem;
+            padding: 0.8rem 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ======== SECTION HEADERS ======== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header h2 i {
+            color: var(--neon-cyan);
+            margin-right: 0.5rem;
+        }
+
+        .section-header .tagline {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-header .tagline span {
+            color: var(--neon-purple);
+            font-weight: 600;
+        }
+
+        /* ======== NEON DIVIDER ======== */
+        .neon-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-purple), transparent);
+            margin: 4rem 0;
+            opacity: 0.5;
+        }
+
+        /* ======== PRODUCT SHOWCASES ======== */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .showcase-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 243, 255, 0.1);
+            border-color: var(--neon-cyan);
+        }
+
+        .showcase-image {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .showcase-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .showcase-card:hover .showcase-image img {
+            transform: scale(1.05);
+        }
+
+        .showcase-info {
+            padding: 1.5rem 2rem 2rem;
+        }
+
+        .showcase-collection {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .showcase-collection::before {
+            content: '//';
+            color: var(--neon-purple);
+        }
+
+        .showcase-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.4rem;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .showcase-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .showcase-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .showcase-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+        }
+
+        .showcase-price .crypto {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .btn-acquire {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-acquire::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+            z-index: -1;
+            transition: width 0.4s ease;
+        }
+
+        .btn-acquire:hover {
+            color: #fff;
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(189, 0, 255, 0.4);
+        }
+
+        .btn-acquire:hover::before {
+            width: 100%;
+        }
+
+        /* ======== SINGLE PRODUCT CARDS ======== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 243, 255, 0.1);
+            border-color: var(--neon-cyan);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 3px 10px;
+            font-size: 0.65rem;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .product-badge.hot {
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
+        }
+
+        .product-badge.new {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(189, 0, 255, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            position: relative;
+            background: #0a0a0f;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.25rem 1.5rem 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-family: 'Space Mono', monospace;
+            color: var(--neon-cyan);
+            font-size: 1.1rem;
+        }
+
+        .btn-buy {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-buy::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--neon-purple);
+            z-index: -1;
+            transition: width 0.3s ease;
+        }
+
+        .btn-buy:hover {
+            color: white;
+            box-shadow: 0 0 15px rgba(189, 0, 255, 0.4);
+        }
+
+        .btn-buy:hover::before {
+            width: 100%;
+        }
+
+        /* ======== PROMO BANNER ======== */
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.1), rgba(0, 243, 255, 0.1));
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 243, 255, 0.05), transparent, rgba(189, 0, 255, 0.05), transparent);
+            animation: promoRotate 15s linear infinite;
+        }
+
+        @keyframes promoRotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .promo-banner h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-banner p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-banner .promo-code {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            border: 1px dashed var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ======== SIZE GUIDE ======== */
+        .size-notice {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .size-notice i {
+            color: var(--neon-cyan);
+            margin-right: 0.5rem;
+        }
+
+        /* ======== RESPONSIVE ======== */
+        @media (max-width: 768px) {
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">T3ch<span
+                    class="highlight">N0mad</span></a></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="index.html#tech">Tech</a></li>
+            <li><a href="dashboard.html">Threat Intel</a></li>
+            <li><a href="apparel.html" class="active">Apparel</a></li>
+            <li><a href="index.html#travel">Travel</a></li>
+            <li><a href="index.html#food">Food</a></li>
+            <li><a href="index.html#contact" class="btn-glow">Connect</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Video Hero Section -->
+    <section class="hero shop-hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="assets/images/Website_Merchandise_Advertising_Video_Creation.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="glitch" data-text="Loadout Store">Loadout Store</h1>
+            <p class="subtitle">Equip Yourself for the Digital Void</p>
+            <div class="hero-cta">
+                <a href="#collections" class="btn-glow"><i class="fas fa-terminal"></i> Browse Loadout</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container" id="collections">
+
+        <!-- Section Header -->
+        <div class="section-header">
+            <h2><i class="fas fa-shield-halved"></i> Cyber-Wear v1.0</h2>
+            <p class="tagline">Engineered apparel for the <span>identity-obsessed</span> and <span>cyber-aware</span>.
+                Each design is a statement. Each thread is a protocol.</p>
+        </div>
+
+        <div class="size-notice">
+            <i class="fas fa-ruler"></i> All items: Unisex Fit • Premium Cotton • Sizes S–3XL • Worldwide Shipping
+        </div>
+
+        <!-- Showcase Collection 1: Essentials -->
+        <div class="showcase-grid">
+
+            <div class="showcase-card">
+                <div class="showcase-image">
+                    <img src="assets/images/Gemini_Generated_Image_9pipt69pipt69pip.png"
+                        alt="T3chN0mad Core Collection - I AM ROOT, System Admin, 127.0.0.1, Identity Access Secure">
+                </div>
+                <div class="showcase-info">
+                    <div class="showcase-collection">Core Identity Pack</div>
+                    <h3 class="showcase-title">The Essentials // Drop 001</h3>
+                    <p class="showcase-desc">Four pillars of cyber identity. <strong>I AM ROOT</strong> — because you
+                        earned it. <strong>No Place Like System Admin</strong> — for those who hold the keys.
+                        <strong>127.0.0.1</strong> — home is where the shell is. <strong>Identity. Access.
+                            Secure.</strong> — the holy trinity.</p>
+                    <div class="showcase-price-row">
+                        <div class="showcase-price">
+                            $35.00 each
+                            <span class="crypto">₿ 0.0012 // Ξ 0.014</span>
+                        </div>
+                        <button class="btn-acquire">Initialize Order</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="showcase-card">
+                <div class="showcase-image">
+                    <img src="assets/images/Gemini_Generated_Image_dfnj1adfnj1adfnj.png"
+                        alt="T3chN0mad Extended Collection - Zero Trust, System Admin Sleeping, I AM ROOT, System Admin">
+                </div>
+                <div class="showcase-info">
+                    <div class="showcase-collection">Extended Protocol Pack</div>
+                    <h3 class="showcase-title">Stealth Series // Drop 002</h3>
+                    <p class="showcase-desc"><strong>Zero Trust Protocol</strong> — verify everything, trust nothing.
+                        <strong>System Admin Is Sleeping</strong> — the threat is real when the admin is AFK. Our
+                        Japanese-inspired cyber aesthetic meets raw identity security culture.</p>
+                    <div class="showcase-price-row">
+                        <div class="showcase-price">
+                            $40.00 each
+                            <span class="crypto">₿ 0.0014 // Ξ 0.016</span>
+                        </div>
+                        <button class="btn-acquire">Deploy to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="neon-divider"></div>
+
+        <!-- Showcase Collection 2: Premium -->
+        <div class="section-header">
+            <h2><i class="fas fa-fire"></i> Premium Drops</h2>
+            <p class="tagline">Restricted access designs. <span>Limited batch</span>. Once they're gone, the protocol
+                terminates.</p>
+        </div>
+
+        <div class="showcase-grid">
+
+            <div class="showcase-card">
+                <div class="showcase-image">
+                    <img src="assets/images/Gemini_Generated_Image_w1yk4ww1yk4ww1yk.png"
+                        alt="T3chN0mad Premium Collection - Access Denied, Beach Mode, Zero Trust Fox, Identity Crusader">
+                </div>
+                <div class="showcase-info">
+                    <div class="showcase-collection">Classified // Premium</div>
+                    <h3 class="showcase-title">Breach Protocol // Drop 003</h3>
+                    <p class="showcase-desc"><strong>ACCESS DENIED</strong> — identity not verified. <strong>Conditional
+                            Access: Beach Mode</strong> — because even admins need a vacation. <strong>Zero Trust
+                            ゼロトスト</strong> — stealth mode activated. <strong>Identity Crusader</strong> — defend the
+                        perimeter.</p>
+                    <div class="showcase-price-row">
+                        <div class="showcase-price">
+                            $45.00 each
+                            <span class="crypto">₿ 0.0016 // Ξ 0.018</span>
+                        </div>
+                        <button class="btn-acquire">Bypass Firewall</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="showcase-card">
+                <div class="showcase-image">
+                    <img src="assets/images/Gemini_Generated_Image_ohqc9qohqc9qohqc.png"
+                        alt="T3chN0mad Full Showroom Display">
+                </div>
+                <div class="showcase-info">
+                    <div class="showcase-collection">Full Loadout Display</div>
+                    <h3 class="showcase-title">The Complete Arsenal</h3>
+                    <p class="showcase-desc">Every design in the collection, displayed in our neon-lit cyber showroom.
+                        Mix and match your loadout. Stack your protocols. Build your identity.</p>
+                    <div class="showcase-price-row">
+                        <div class="showcase-price">
+                            Full Set: $249
+                            <span class="crypto">₿ 0.0085 // Save 20%</span>
+                        </div>
+                        <button class="btn-acquire">Acquire Full Set</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Promo Banner -->
+        <div class="promo-banner">
+            <h3><i class="fas fa-bolt"></i> First Access Protocol</h3>
+            <p>Use the code below at checkout for 15% off your first loadout drop.</p>
+            <div class="promo-code">N0MAD15</div>
+        </div>
+
+        <div class="neon-divider"></div>
+
+        <!-- Individual Products -->
+        <div class="section-header">
+            <h2><i class="fas fa-tshirt"></i> Individual Loadout</h2>
+            <p class="tagline">Pick your protocols. <span>One design at a time</span>.</p>
+        </div>
+
+        <div class="products-grid">
+
+            <div class="product-card">
+                <span class="product-badge hot">Hot</span>
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_9pipt69pipt69pip.png" alt="I AM ROOT Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">Root Access Tee</h3>
+                        <p class="product-sub">sudo rm -rf doubts</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$35</span>
+                        <button class="btn-buy">Acquire</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_9pipt69pipt69pip.png" alt="System Admin Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">SysAdmin Override</h3>
+                        <p class="product-sub">No place like System Admin</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$35</span>
+                        <button class="btn-buy">Acquire</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_dfnj1adfnj1adfnj.png" alt="Zero Trust Protocol Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">Zero Trust Fox</h3>
+                        <p class="product-sub">ゼロトスト • Stealth Mode</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$40</span>
+                        <button class="btn-buy">Execute</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="product-badge new">New</span>
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_w1yk4ww1yk4ww1yk.png" alt="Access Denied Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">Access Denied</h3>
+                        <p class="product-sub">Identity Not Verified</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$45</span>
+                        <button class="btn-buy">Bypass</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_w1yk4ww1yk4ww1yk.png" alt="Identity Crusader Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">Identity Crusader</h3>
+                        <p class="product-sub">アインティー猫 • Defend the Perimeter</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$45</span>
+                        <button class="btn-buy">Authorize</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <span class="product-badge">Beach</span>
+                <div class="product-image">
+                    <img src="assets/images/Gemini_Generated_Image_w1yk4ww1yk4ww1yk.png" alt="Beach Mode Tee">
+                </div>
+                <div class="product-info">
+                    <div>
+                        <h3 class="product-name">Conditional Access</h3>
+                        <p class="product-sub">Beach Mode Activated 🏖️</p>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$40</span>
+                        <button class="btn-buy">Activate</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="size-notice" style="margin-top: 3rem;">
+            <p><i class="fas fa-lock"></i> Secure checkout powered by encrypted protocols. <i class="fas fa-truck"></i>
+                Free shipping on orders over $100.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer
+        style="text-align: center; padding: 2rem; background: var(--bg-dark); color: var(--text-muted); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js?v=2.3"></script>
+
+    <!-- WidgetBot -->
+    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
+        new WidgetBot({
+            server: '1471803322183848039',
+            channel: '1471808388961669212'
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="T3chN0mad - Exploring the intersection of Technology, Travel, and Culinary Adventures. Live feeds from top cybersecurity, travel, and food sources.">
+    <title>T3chN0mad | Tech • Travel • Taste</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2.0">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">T3ch<span class="highlight">N0mad</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#tech">Tech</a></li>
+            <li><a href="dashboard.html">Threat Intel</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="#travel">Travel</a></li>
+            <li><a href="#food">Food</a></li>
+            <li><a href="#contact" class="btn-glow">Connect</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="glitch" data-text="T3chN0mad">T3chN0mad</h1>
+            <p class="subtitle">Exploring the Digital Frontier</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="count">30+</span>
+                    <span class="label">Countries</span>
+                </div>
+                <div class="stat-item">
+                    <span class="count">∞</span>
+                    <span class="label">Lines of Code</span>
+                </div>
+                <div class="stat-item">
+                    <span class="count">100%</span>
+                    <span class="label">Authentic Taste</span>
+                </div>
+            </div>
+            <a href="#tech" class="scroll-down">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Connect / Discord Section -->
+    <section id="connect" class="content-section" style="margin-top: -50px; position: relative; z-index: 10;">
+        <div class="glass-panel"
+            style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 3rem; display: flex; flex-wrap: wrap; gap: 4rem; align-items: center; justify-content: center; background: rgba(10, 10, 15, 0.8); border: 1px solid var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);">
+
+            <!-- Discord Invite Side -->
+            <div style="flex: 1; min-width: 300px; text-align: center;">
+                <i class="fab fa-discord"
+                    style="font-size: 5rem; color: #5865F2; margin-bottom: 1.5rem; filter: drop-shadow(0 0 10px rgba(88, 101, 242, 0.5));"></i>
+                <h2 style="font-size: 2rem; margin-bottom: 1rem;">Join the Server</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Chat live with the T3chN0mad community. Share
+                    your setup, travel tips, and food finds.</p>
+                <a href="#" class="btn-glow"
+                    style="background: #5865F2; color: white !important; border-color: #5865F2; box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);">
+                    <i class="fab fa-discord"></i> Accept Invite
+                </a>
+            </div>
+
+            <!-- Message Box Side -->
+            <div style="flex: 1; min-width: 300px;">
+                <h3 style="margin-bottom: 1.5rem; color: var(--neon-cyan);">Send a Message</h3>
+                <form action="contact.php" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="hidden" name="source_page" value="index">
+                    <div class="input-group" style="display: flex; gap: 1rem;">
+                        <input type="text" name="name" placeholder="Name" required
+                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; border-radius: 5px;">
+                        <input type="email" name="email" placeholder="Email" required
+                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; border-radius: 5px;">
+                    </div>
+                    <textarea name="message" placeholder="Your Message..." required
+                        style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; border-radius: 5px; min-height: 100px; resize: vertical;"></textarea>
+                    <button type="submit" class="btn-glow" style="cursor: pointer;">
+                        Send <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <!-- Status Message Area -->
+                    <div id="index-form-status" style="margin-top: 0.5rem; display: none;"></div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <main class="container">
+
+        <!-- Tech Section -->
+        <section id="tech" class="content-section">
+            <div class="content-text" data-aos="fade-right">
+                <h2><i class="fas fa-code"></i> The Tech</h2>
+                <p>Bleeding edge gadgets, clean code, and the cyber-security of tomorrow. Dive into the workflow of a
+                    nomadic developer.</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-microchip"></i> Hardware Reviews</li>
+                    <li><i class="fas fa-terminal"></i> Coding Tutorials</li>
+                    <li><i class="fas fa-wifi"></i> Remote Setup Guides</li>
+                </ul>
+                <a href="#" class="btn-outline">Read More</a>
+            </div>
+            <div class="content-image" data-aos="fade-left">
+                <div class="card-3d">
+                    <img src="assets/images/tech.png" alt="Futuristic Tech Setup">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Feed Section -->
+        <section id="tech-feed" class="feed-section">
+            <div class="feed-header">
+                <div class="feed-title-group">
+                    <i class="fas fa-microchip feed-icon cyber-icon"></i>
+                    <h2>Tech & Cyber Feed</h2>
+                </div>
+                <p class="feed-subtitle">Latest updates from the digital frontier</p>
+                <div class="feed-sources">
+                    <span class="source-tag"><i class="fas fa-rss"></i> The Hacker News</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> Krebs on Security</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> BleepingComputer</span>
+                </div>
+            </div>
+
+            <div class="feed-layout-wrapper">
+                <!-- Single Column Feed for Tech -->
+                <div class="feed-main-column" style="width: 100%;">
+                    <div class="feed-grid" id="cyber-feed-grid">
+                        <!-- Skeleton loaders -->
+                        <div class="feed-card skeleton">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                        <div class="feed-card skeleton">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                        <div class="feed-card skeleton">
+                            <div class="skeleton-line title"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line short"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </section>
+
+        <!-- Travel Section -->
+        <section id="travel" class="content-section reverse">
+            <div class="content-image" data-aos="fade-right">
+                <div class="card-3d">
+                    <img src="assets/images/travel.png" alt="Cyberpunk City View">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+            <div class="content-text" data-aos="fade-left">
+                <h2><i class="fas fa-plane-departure"></i> The Journey</h2>
+                <p>From neon-lit metropolises to serene mountain escapes. Discover the best spots for digital nomads to
+                    work and play.</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-map-marked-alt"></i> City Guides</li>
+                    <li><i class="fas fa-signal"></i> Coworking Spots</li>
+                    <li><i class="fas fa-passport"></i> Visa Tips</li>
+                </ul>
+                <a href="#" class="btn-outline">Explore</a>
+            </div>
+        </section>
+
+        <!-- Travel Feed Section -->
+        <section id="travel-feed" class="feed-section">
+            <div class="feed-header">
+                <div class="feed-title-group">
+                    <i class="fas fa-globe-americas feed-icon travel-icon"></i>
+                    <h2>Nomad Dispatch</h2>
+                </div>
+                <p class="feed-subtitle">Latest from the world's travel & digital nomad scenes</p>
+                <div class="feed-sources">
+                    <span class="source-tag"><i class="fas fa-rss"></i> Lonely Planet</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> Nomadic Matt</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> The Points Guy</span>
+                </div>
+            </div>
+            <div class="feed-grid" id="travel-feed-grid">
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Food Section -->
+        <section id="food" class="content-section">
+            <div class="content-text" data-aos="fade-right">
+                <h2><i class="fas fa-utensils"></i> The Taste</h2>
+                <p>Fueling the journey with street food masterpieces and gourmet experiences. Where flavor meets future.
+                </p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-pepper-hot"></i> Street Food Gems</li>
+                    <li><i class="fas fa-coffee"></i> Best Cafes</li>
+                    <li><i class="fas fa-seedling"></i> Local Delicacies</li>
+                </ul>
+                <a href="#" class="btn-outline">Taste This</a>
+            </div>
+            <div class="content-image" data-aos="fade-left">
+                <div class="card-3d">
+                    <img src="assets/images/food.png" alt="Futuristic Ramen">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Food Feed Section -->
+        <section id="food-feed" class="feed-section">
+            <div class="feed-header">
+                <div class="feed-title-group">
+                    <i class="fas fa-fire-burner feed-icon food-icon"></i>
+                    <h2>Flavor Radar</h2>
+                </div>
+                <p class="feed-subtitle">Fresh picks from the culinary world</p>
+                <div class="feed-sources">
+                    <span class="source-tag"><i class="fas fa-rss"></i> Serious Eats</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> Eater</span>
+                    <span class="source-tag"><i class="fas fa-rss"></i> Food52</span>
+                </div>
+            </div>
+            <div class="feed-grid" id="food-feed-grid">
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+                <div class="feed-card skeleton">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Newsletter/Contact -->
+    <section id="contact" class="newsletter">
+        <div class="glass-panel">
+            <h2>Join the Nomad Tribe</h2>
+            <p>Get the latest updates on tech trends, travel guides, and food spots directly to your inbox.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Enter your email...">
+                <button type="submit">Subscribe</button>
+            </form>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js?v=2.0"></script>
+
+    <!-- WidgetBot Crate (Discord Chat Bubble) -->
+    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
+        new WidgetBot({
+            server: '1471803322183848039',
+            channel: '1471808388961669212'
+        })
+    </script>
+</body>
+
+</html>

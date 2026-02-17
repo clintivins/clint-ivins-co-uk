@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About T3chN0mad - The story behind the code and the journey.">
+    <title>About | T3chN0mad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero.about-hero {
+            height: 60vh;
+            min-height: 500px;
+        }
+
+        /* Ensure the active link stays highlighted */
+        .nav-links li a.active {
+            color: var(--neon-cyan);
+        }
+
+        .nav-links li a.active::after {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo"><a href="index.html" style="color: inherit; text-decoration: none;">T3ch<span
+                    class="highlight">N0mad</span></a></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="active">About</a></li>
+            <li><a href="index.html#tech">Tech</a></li>
+            <li><a href="dashboard.html">Threat Intel</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="index.html#travel">Travel</a></li>
+            <li><a href="index.html#food">Food</a></li>
+            <li><a href="index.html#contact" class="btn-glow">Connect</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero about-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="glitch" data-text="About Me">About Me</h1>
+            <p class="subtitle">Behind the Screen & The Scenes</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Intro Section -->
+        <section class="content-section visible">
+            <div class="content-text">
+                <h2>Building the Tribe</h2>
+                <p>T3chN0mad isn't just about me—it's about <strong>us</strong>. It's a personal passion project born
+                    from the desire to create a digital footprint where wandering minds can find common ground.</p>
+                <p>My goal is to foster a global community of like-minded digital nomads—a space where we can safely
+                    gather, collaborate, and share the experiences that fuel us: the cutting-edge tech we build, the
+                    journeys we take, and the meals we share.</p>
+                <p class="bio-backstory"
+                    style="margin-top: 1rem; font-size: 0.95rem; color: var(--text-muted); font-style: italic;">
+                    Growing up in the seaside town of Uvongo, South Africa, I learned early on that the ocean connects
+                    all shores. Today, I'm using that inspiration to build bridges in the digital world, creating safe
+                    harbors for nomads to connect, create, and collaborate.
+                </p>
+
+                <div class="hero-stats"
+                    style="margin-top: 2rem; justify-content: flex-start; gap: 3rem; margin-bottom: 0;">
+                    <div class="stat-item">
+                        <span class="count"><i class="fas fa-users"></i></span>
+                        <span class="label">Community</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="count"><i class="fas fa-handshake"></i></span>
+                        <span class="label">Collaboration</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="count"><i class="fas fa-globe"></i></span>
+                        <span class="label">Connection</span>
+                    </div>
+                </div>
+            </div>
+            <div class="content-image">
+                <div class="card-3d">
+                    <img src="assets/images/about_avatar.png" alt="T3chN0mad Avatar">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Philosophy / Skills Section -->
+        <section class="content-section reverse visible">
+            <div class="content-image">
+                <div class="card-3d">
+                    <img src="assets/images/tech.png" alt="Tech Stack">
+                    <div class="glow-effect"></div>
+                </div>
+            </div>
+            <div class="content-text">
+                <h2><i class="fas fa-network-wired"></i> The Vision</h2>
+                <p>In a world of remote work, genuine connection is the most valuable currency. I want to build a
+                    platform that goes beyond networking—a place for forming real bonds over shared passions.</p>
+                <p>Whether it's securing our digital lives, discovering the next great travel destination, or breaking
+                    bread over a street food masterpiece, we thrive when we share.</p>
+
+                <ul class="feature-list">
+                    <li><i class="fas fa-shield-halved"></i> <strong>Safety First:</strong> Creating secure spaces for
+                        digital exchange.</li>
+                    <li><i class="fas fa-utensils"></i> <strong>Shared Tables:</strong> Connecting through culinary
+                        adventures.</li>
+                    <li><i class="fas fa-laptop-code"></i> <strong>Co-Creation:</strong> collaborating on the tech of
+                        tomorrow.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Connect Section (Simplified) -->
+    <!-- Connect Section -->
+    <section id="contact" class="newsletter">
+        <div class="glass-panel">
+            <h2>Let's Collaborate</h2>
+            <p>Have a project in mind or just want to swap travel stories? Reach out.</p>
+
+            <!-- Status Messages handled via JS/URL params would be ideal, but for now simple structure -->
+            <div id="form-status" style="margin-bottom: 1rem; color: var(--neon-cyan); display: none;"></div>
+
+            <form id="contactForm" action="contact.php" method="POST" class="contact-form">
+                <div class="input-group">
+                    <input type="text" name="name" placeholder="Name" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <textarea name="message" placeholder="Your Message..." required></textarea>
+                <button type="submit" class="btn-glow">Send Message <i class="fas fa-paper-plane"></i></button>
+            </form>
+
+            <div class="social-links" style="margin-top: 2rem;">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Script to check URL params for status -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const status = urlParams.get('status');
+            const statusDiv = document.getElementById('form-status');
+
+            if (status === 'success') {
+                statusDiv.innerText = "Message sent successfully! 🚀";
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = 'var(--neon-green)';
+            } else if (status === 'error') {
+                statusDiv.innerText = "Failed to send message. Please try again. ⚠️";
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#ff4d4d';
+            }
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer
+        style="text-align: center; padding: 2rem; background: var(--bg-dark); color: var(--text-muted); border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script src="script.js?v=2.1"></script>
+
+    <!-- WidgetBot Crate (Discord Chat Bubble) -->
+    <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
+        new WidgetBot({
+            server: '1471803322183848039',
+            channel: '1471808388961669212'
+        })
+    </script>
+</body>
+
+</html>
