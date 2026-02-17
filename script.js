@@ -490,6 +490,30 @@ document.addEventListener('DOMContentLoaded', () => {
             updateGauge(Math.floor(Math.random() * 10) - 5);
         }, 60000);
 
+        // Map Tab Switcher Logic
+        const tabBtns = document.querySelectorAll('.map-tab-btn');
+        const mapViews = document.querySelectorAll('.map-view');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mapId = btn.getAttribute('data-map');
+
+                // Update buttons
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Update views
+                mapViews.forEach(view => {
+                    view.classList.remove('active');
+                    if (view.id === `map-${mapId}`) {
+                        view.classList.add('active');
+                    }
+                });
+
+                console.log(`[Dashboard] Switched to ${mapId} map`);
+            });
+        });
+
         // Refresh alerts & insights every 5 minutes
         setInterval(() => {
             console.log("[Dashboard] Auto-refreshing feeds...");
