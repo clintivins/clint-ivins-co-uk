@@ -929,8 +929,117 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    if (document.getElementById('sidebar-leaderboard')) {
-        updateSidebarLeaderboard();
+    // === GORDIE THE ID GUY LOGIC ===
+    const botTrigger = document.getElementById('intel-bot-trigger');
+    const botContainer = document.getElementById('intel-bot-container');
+    const closeBot = document.getElementById('close-bot');
+    const botInput = document.getElementById('bot-input');
+    const sendBtn = document.getElementById('send-bot-query');
+    const messageArea = document.getElementById('intel-bot-messages');
+
+    // Login Elements
+    const loginOverlay = document.getElementById('bot-login-overlay');
+    const usernameInput = document.getElementById('bot-username');
+    const passwordInput = document.getElementById('bot-password');
+    const loginBtn = document.getElementById('bot-login-btn');
+    const loginError = document.getElementById('login-error');
+
+    let isAuthenticated = false;
+
+    if (botTrigger && botContainer) {
+        botTrigger.onclick = () => {
+            botContainer.classList.toggle('intel-bot-collapsed');
+            if (!botContainer.classList.contains('intel-bot-collapsed')) {
+                if (!isAuthenticated) {
+                    usernameInput.focus();
+                } else {
+                    botInput.focus();
+                }
+            }
+        };
+
+        closeBot.onclick = () => {
+            botContainer.classList.add('intel-bot-collapsed');
+        };
+
+        const handleLogin = () => {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+
+            if (user === 'Gandolf' && pass === '@@Thunder_55') {
+                isAuthenticated = true;
+                loginOverlay.style.display = 'none';
+                loginError.style.display = 'none';
+                botInput.focus();
+            } else {
+                loginError.style.display = 'block';
+                passwordInput.value = '';
+            }
+        };
+
+        loginBtn.onclick = handleLogin;
+        [usernameInput, passwordInput].forEach(inp => {
+            inp.onkeypress = (e) => { if (e.key === 'Enter') handleLogin(); };
+        });
+
+        const addMessage = (text, sender) => {
+            const div = document.createElement('div');
+            div.className = `bot-message ${sender}`;
+
+            // Simple markdown-to-HTML conversion for natural feel
+            let formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                .replace(/\n/g, '<br>'); // Line breaks
+
+            div.innerHTML = formattedText;
+            messageArea.appendChild(div);
+            messageArea.scrollTop = messageArea.scrollHeight;
+        };
+
+        const handleBotQuery = async () => {
+            if (!isAuthenticated) return;
+            const query = botInput.value.trim();
+            if (!query) return;
+
+            addMessage(query, 'user');
+            botInput.value = '';
+
+            // Loading indicator
+            const loadingId = 'bot-loading-' + Date.now();
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'bot-message bot';
+            loadingDiv.id = loadingId;
+            loadingDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gordie is checking around...';
+            messageArea.appendChild(loadingDiv);
+            messageArea.scrollTop = messageArea.scrollHeight;
+
+            try {
+                const response = await fetch('mitre_bot.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: query })
+                });
+
+                const data = await response.json();
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) loadingElement.remove();
+
+                if (data.status === 'success') {
+                    addMessage(data.message, 'bot');
+                } else {
+                    addMessage(data.message || `Protocol Error: ${data.error || 'Connection Failed'}`, 'system');
+                }
+            } catch (e) {
+                const loadingElement = document.getElementById(loadingId);
+                if (loadingElement) loadingElement.remove();
+                addMessage("Uplink failed. Check your connection.", "system");
+            }
+        };
+
+        sendBtn.onclick = handleBotQuery;
+        botInput.onkeypress = (e) => {
+            if (e.key === 'Enter') handleBotQuery();
+        };
     }
 
 });

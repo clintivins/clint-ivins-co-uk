@@ -185,6 +185,47 @@
             </div>
         </section>
 
+        <!-- MITRE ATT&CK Intel Bot -->
+        <div id="intel-bot-container" class="intel-bot-collapsed">
+            <!-- Login Overlay -->
+            <div id="bot-login-overlay">
+                <div class="login-content">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Access Restricted</h3>
+                    <p>Identify yourself to Gordie</p>
+                    <input type="text" id="bot-username" placeholder="Username">
+                    <input type="password" id="bot-password" placeholder="Password">
+                    <button id="bot-login-btn">Authenticate</button>
+                    <div id="login-error" style="color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem; display: none;">
+                        Invalid Override.</div>
+                </div>
+            </div>
+
+            <div id="intel-bot-header">
+                <div class="bot-title">
+                    <i class="fas fa-id-card"></i> GORDIE THE ID GUY
+                </div>
+                <div class="bot-controls">
+                    <button id="close-bot" title="Minimize"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div id="intel-bot-messages">
+                <div class="bot-message system">
+                    Identity Sentinel active. Hey there! Gordie here. I've got the scoop on all things MITRE and
+                    Identity. What's on your mind?
+                </div>
+            </div>
+            <div id="intel-bot-input-area">
+                <input type="text" id="bot-input" placeholder="Ask Gordie anything...">
+                <button id="send-bot-query"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <button id="intel-bot-trigger" title="Open MITRE Intel Bot">
+            <i class="fas fa-shield-halved"></i>
+            <span class="pulse-ring"></span>
+        </button>
+
     </main>
 
     <footer>
