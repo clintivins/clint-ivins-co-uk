@@ -881,4 +881,56 @@ document.addEventListener('DOMContentLoaded', () => {
         initDashboard();
     }
 
+    // ========================================
+    // SIDEBAR LEADERBOARD (Home Page)
+    // ========================================
+
+    async function updateSidebarLeaderboard() {
+        const sidebar = document.getElementById('sidebar-leaderboard');
+        if (!sidebar) return;
+
+        try {
+            const resp = await fetch('academy.php?action=get_leaderboard');
+            if (!resp.ok) throw new Error("Leaderboard source unavailable");
+            const data = await resp.json();
+
+            if (data.length === 0) {
+                sidebar.innerHTML = '<div style="color: var(--text-muted); font-size: 0.8rem;">No active operators.</div>';
+                return;
+            }
+
+            // Take top 5
+            const top5 = data.slice(0, 5);
+            sidebar.innerHTML = '';
+
+            top5.forEach((user, idx) => {
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    display: flex; justify-content: space-between; align-items: center;
+                    padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+                    font-family: 'Space Mono', monospace;
+                `;
+
+                item.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <span style="color: ${idx === 0 ? 'var(--neon-gold)' : 'var(--text-muted)'}; font-weight: 800;">#${idx + 1}</span>
+                        <span style="color: #fff; font-size: 0.9rem;">${user.name}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: var(--neon-cyan); font-size: 0.8rem;">${user.score}/25</div>
+                    </div>
+                `;
+                sidebar.appendChild(item);
+            });
+
+        } catch (e) {
+            console.warn("[Leaderboard] Failed to load sidebar:", e);
+            sidebar.innerHTML = '<div style="color: var(--text-muted); font-size: 0.8rem;">Offline Mode.</div>';
+        }
+    }
+
+    if (document.getElementById('sidebar-leaderboard')) {
+        updateSidebarLeaderboard();
+    }
+
 });
