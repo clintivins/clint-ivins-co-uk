@@ -7,7 +7,7 @@
 header('Content-Type: application/json');
 
 // --- CONFIGURATION ---
-define('GEMINI_API_KEY', 'AIzaSyBkRualRDed7YcKnmg1furs9LpFdGl-pJA');
+require_once('secrets.php');
 define('GEMINI_MODEL', 'gemini-2.5-flash');
 define('GEMINI_ENDPOINT', 'https://generativelanguage.googleapis.com/v1beta/models/' . GEMINI_MODEL . ':generateContent?key=' . GEMINI_API_KEY);
 
