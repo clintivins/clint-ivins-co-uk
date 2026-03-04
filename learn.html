@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="T3chN0mad Learning Portal - Cybersecurity training videos on Identity, MITRE ATT&CK, and Social Engineering.">
+    <title>Learning Portal | T3chN0mad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== LEARNING PORTAL STYLES ===== */
+        .portal-hero {
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+            position: relative;
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.12) 0%, rgba(0, 243, 255, 0.06) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 4rem 2rem;
+            overflow: hidden;
+        }
+
+        .portal-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 100%, rgba(189, 0, 255, 0.15) 0%, transparent 70%);
+        }
+
+        .portal-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .portal-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(189, 0, 255, 0.15);
+            border: 1px solid rgba(189, 0, 255, 0.4);
+            color: #bd00ff;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .portal-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #bd00ff 60%, #00f3ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .portal-hero p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .portal-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .portal-stat {
+            text-align: center;
+        }
+
+        .portal-stat .num {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #bd00ff;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .portal-stat .lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== FILTER TABS ===== */
+        .portal-filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 3rem auto 2rem;
+            max-width: 800px;
+            padding: 0 1.5rem;
+        }
+
+        .filter-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .filter-pill:hover,
+        .filter-pill.active {
+            background: rgba(189, 0, 255, 0.15);
+            border-color: #bd00ff;
+            color: #fff;
+        }
+
+        .filter-pill.active {
+            box-shadow: 0 0 12px rgba(189, 0, 255, 0.3);
+        }
+
+        /* ===== VIDEO GRID ===== */
+        .portal-main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Featured (large) video */
+        .featured-video {
+            margin-bottom: 3rem;
+        }
+
+        .featured-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(189, 0, 255, 0.12);
+            border-color: rgba(189, 0, 255, 0.3);
+        }
+
+        .featured-card .video-wrapper {
+            position: relative;
+            padding-bottom: 52%;
+            background: #000;
+        }
+
+        .featured-card .video-wrapper video,
+        .featured-card .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .featured-card .video-info {
+            padding: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .featured-card .video-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #bd00ff, #7b00e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(189, 0, 255, 0.3);
+        }
+
+        .featured-card .video-meta h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .featured-card .video-meta p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .video-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .video-tag {
+            background: rgba(189, 0, 255, 0.12);
+            border: 1px solid rgba(189, 0, 255, 0.25);
+            color: #bd00ff;
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .video-tag.cyan {
+            background: rgba(0, 243, 255, 0.1);
+            border-color: rgba(0, 243, 255, 0.25);
+            color: #00f3ff;
+        }
+
+        .video-tag.gold {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.25);
+            color: #ffd700;
+        }
+
+        /* Video grid cards */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(189, 0, 255, 0.1);
+            border-color: rgba(189, 0, 255, 0.25);
+        }
+
+        .video-card .thumb-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            background: #000;
+        }
+
+        .video-card .thumb-wrapper video,
+        .video-card .thumb-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-card .thumb-wrapper .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+        .video-card .thumb-wrapper:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay i {
+            font-size: 3rem;
+            color: #fff;
+            filter: drop-shadow(0 0 20px rgba(189, 0, 255, 0.8));
+        }
+
+        .video-card .card-body {
+            padding: 1.25rem;
+        }
+
+        .video-card .card-body h3 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            color: #fff;
+        }
+
+        .video-card .card-body p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 0.8rem;
+        }
+
+        /* Duration badge */
+        .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Progress bar placeholder */
+        .progress-bar-mini {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            margin-top: 0.75rem;
+        }
+
+        .progress-bar-mini .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #bd00ff, #00f3ff);
+            border-radius: 2px;
+            width: 0%;
+        }
+
+        /* CTA Banner */
+        .portal-cta {
+            margin: 4rem 0 0;
+            background: linear-gradient(135deg, rgba(189, 0, 255, 0.1), rgba(0, 243, 255, 0.05));
+            border: 1px solid rgba(189, 0, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .portal-cta h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .portal-cta p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .featured-card .video-info {
+                flex-direction: column;
+            }
+
+            .portal-stats {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">T3ch<span class="highlight">N0mad</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="dashboard.html">Threat Intel</a></li>
+            <li><a href="academy.php">Academy</a></li>
+            <li><a href="learn.html" class="active">Learn</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="index.html#contact" class="btn-glow">Connect</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="portal-hero">
+        <div class="portal-hero-content">
+            <div class="badge"><i class="fas fa-play-circle"></i> Learning Portal</div>
+            <h1>T3chN0mad Academy</h1>
+            <p>Deep-dive training sessions on Identity Security, MITRE ATT&CK, Social Engineering & beyond. Learn at
+                your own pace.</p>
+            <div class="portal-stats">
+                <div class="portal-stat">
+                    <span class="num" id="video-count">1</span>
+                    <span class="lbl">Videos</span>
+                </div>
+                <div class="portal-stat">
+                    <span class="num">100%</span>
+                    <span class="lbl">Free</span>
+                </div>
+                <div class="portal-stat">
+                    <span class="num">∞</span>
+                    <span class="lbl">Replays</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Pills -->
+    <div class="portal-filters">
+        <button class="filter-pill active" data-cat="all">All Topics</button>
+        <button class="filter-pill" data-cat="social-engineering">Social Engineering</button>
+        <button class="filter-pill" data-cat="identity">Identity Security</button>
+        <button class="filter-pill" data-cat="mitre">MITRE ATT&CK</button>
+        <button class="filter-pill" data-cat="awareness">Awareness</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+
+        <!-- Featured Video -->
+        <div class="featured-video">
+            <div class="section-label"><i class="fas fa-star" style="color:#ffd700;"></i> Featured</div>
+            <div class="featured-card" data-cat="social-engineering awareness">
+                <div class="video-wrapper">
+                    <video controls preload="metadata" poster="">
+                        <source src="assets/videos/Social_Engineering_Video_On_Beach.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="video-icon"><i class="fas fa-user-secret"></i></div>
+                    <div class="video-meta">
+                        <h2>Social Engineering — On the Beach</h2>
+                        <p>A real-world walkthrough of social engineering tactics used by attackers to manipulate people
+                            into revealing sensitive information. Learn how to recognise and defend against these
+                            human-focused attacks.</p>
+                        <div class="video-tags">
+                            <span class="video-tag">Social Engineering</span>
+                            <span class="video-tag cyan">T1566</span>
+                            <span class="video-tag gold">Awareness</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- More Videos Grid (ready for new videos to be added) -->
+        <div id="video-grid-section" style="display:none;">
+            <div class="section-label"><i class="fas fa-film"></i> All Videos</div>
+            <div class="video-grid" id="video-grid">
+                <!-- Additional video cards injected here -->
+            </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="portal-cta">
+            <h2><i class="fas fa-trophy" style="color:#ffd700;"></i> Ready to Test Your Skills?</h2>
+            <p>Put your knowledge to the test with our 25-question MITRE ATT&CK gauntlet and claim your rank on the
+                leaderboard.</p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="academy.php" class="btn-glow">Take the Challenge</a>
+                <a href="dashboard.html" class="btn-outline">Threat Intel Dashboard</a>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js?v=2.0"></script>
+    <script src="gordie.js?v=1.0"></script>
+    <script>
+        // Filter logic
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                const cat = pill.dataset.cat;
+                document.querySelectorAll('[data-cat]').forEach(card => {
+                    if (cat === 'all' || card.dataset.cat.includes(cat)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
