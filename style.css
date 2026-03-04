@@ -1734,7 +1734,9 @@ footer {
     font-family: var(--font-mono);
     font-weight: 700;
     border-radius: 12px 0 8px 0;
-    padding: 10px 20px;
+    padding: 10px 60px 10px 20px;
+    min-width: 280px;
+    background: rgba(10, 10, 20, 0.98);
 }
 
 .threat-map-container {
