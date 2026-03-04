@@ -453,6 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fire up the feeds
     initFeeds();
 
+    // Fire up the sidebar leaderboard
+    updateSidebarLeaderboard();
+
     // Check for status messages (for Index page contact form)
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status');
