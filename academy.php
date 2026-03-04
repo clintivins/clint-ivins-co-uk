@@ -2,6 +2,10 @@
 // T3chN0mad Academy Backend - Leaderboard & Session Management
 session_start();
 
+// Suppress PHP deprecation warnings from corrupting JSON output
+error_reporting(E_ERROR);
+ini_set('display_errors', '0');
+
 $leaderboardFile = 'leaderboard.json';
 
 // Initialize leaderboard if it doesn't exist
@@ -11,9 +15,9 @@ if (!file_exists($leaderboardFile)) {
 
 // Handle Leaderboard Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'submit_score') {
-    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+    $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
     $score = filter_var($_POST['score'], FILTER_VALIDATE_INT);
-    $rating = filter_var($_POST['rating'], FILTER_SANITIZE_STRING);
+    $rating = htmlspecialchars(trim($_POST['rating']), ENT_QUOTES, 'UTF-8');
     $time = date('Y-m-d H:i:s');
 
     if ($name && $score !== false) {
