@@ -445,6 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             }
         }
     </script>
+    <script src="gordie.js?v=1.0"></script>
 </body>
 
 </html>
