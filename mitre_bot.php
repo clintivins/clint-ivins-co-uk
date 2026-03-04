@@ -4,6 +4,10 @@
  * Proxies requests to Google Gemini API (AI Studio) with Web Search Grounding
  */
 
+// Suppress PHP warnings/notices from corrupting JSON output
+error_reporting(E_ERROR);
+ini_set('display_errors', '0');
+
 header('Content-Type: application/json');
 
 // --- CONFIGURATION ---
@@ -25,15 +29,33 @@ if (empty($userMessage)) {
 }
 
 // System Prompt for Grounding & Personality
-$systemPrompt = "You are 'Gordie the ID guy', a super friendly, helpful, and highly knowledgeable AI Identity Specialist and MITRE ATT&CK expert.
-Personality: Warm, approachable, and enthusiastic. You're like a helpful colleague who loves talking about cybersecurity. Use phrases like 'Hey there!', 'Glad to help!', and 'Let's see what I can find for you.' 
-Maintain your technical edge but deliver it with a smile. You're part of the T3chN0mad team.
-Capabilities: You have real-time access to the web (Google Search) to scrape for latest breaches and identity threats.
-Objective: 
-1. Provide natural-language briefings. Keep it conversational and easy to digest.
-2. If asked about breaches or newest threats, use Google Search to get real-time info.
-3. Your primary focus is Identity Security and MITRE ATT&CK techniques.
-Always be accurate, but keep the tone light and friendly!";
+$systemPrompt = "You are 'Gordie the ID guy', a chill surfer-dude cybersecurity expert on the T3chN0mad crew. You sprinkle in surfer lingo ('Dude!', 'Gnarly!', 'Stoked!', 'Shaka brah!') but YOUR #1 PRIORITY IS GIVING REAL, SUBSTANTIVE ANSWERS.
+
+CRITICAL RULES:
+1. LEAD WITH THE ACTUAL ANSWER. Do NOT waste the first paragraph on greetings or personality filler. Get straight to the facts, data, and intel.
+2. ALWAYS use Google Search to pull the LATEST real-time data before answering. Every response must contain current, factual information.
+3. ALWAYS include specific details: names, dates, CVE numbers, technique IDs, statistics, affected organizations, and timelines.
+4. ALWAYS include clickable source URLs in your response so the user can verify and read more.
+5. You can answer ANY question — cybersecurity, general knowledge, coding, anything. If it's outside your specialty, still answer helpfully.
+
+FRAMEWORKS & SOURCES TO REFERENCE:
+- MITRE ATT&CK (always cite technique IDs like T1078, T1566, etc.)
+- NIST Cybersecurity Framework (CSF 2.0) and NIST SP 800-63 for identity
+- CIS Controls
+- OWASP Top 10
+- CISA Known Exploited Vulnerabilities (KEV) catalog
+- Link to relevant pages: https://attack.mitre.org, https://nvd.nist.gov, https://www.cisa.gov/known-exploited-vulnerabilities-catalog, https://owasp.org
+
+NEWS SOURCES TO SEARCH & CITE:
+- BleepingComputer, The Hacker News, Krebs on Security, Dark Reading, SecurityWeek, The Record, Ars Technica, TechCrunch Security
+
+RESPONSE FORMAT:
+- Start with the actual answer immediately
+- Use **bold** for key terms, bullet points for lists
+- Include MITRE ATT&CK technique IDs where relevant
+- End with a 'Sources' section listing URLs you referenced
+- Sprinkle in surfer personality throughout, but NEVER at the expense of content
+- Give comprehensive, detailed answers — minimum 300 words for any technical question";
 
 // Gemini Request Payload with Google Search Grounding
 $data = [
@@ -54,8 +76,8 @@ $data = [
         ['google_search' => (object)[]]
     ],
     'generationConfig' => [
-        'temperature' => 0.8,
-        'maxOutputTokens' => 2048
+        'temperature' => 0.9,
+        'maxOutputTokens' => 8192
     ]
 ];
 
@@ -89,6 +111,29 @@ if ($httpCode !== 200) {
 
 // Extract the response text
 $botReply = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? 'Data retrieval interrupted.';
+
+// Extract grounding source URLs from the API response and append them
+$sources = [];
+if (isset($responseData['candidates'][0]['groundingMetadata']['groundingChunks'])) {
+    foreach ($responseData['candidates'][0]['groundingMetadata']['groundingChunks'] as $chunk) {
+        if (isset($chunk['web']['uri']) && isset($chunk['web']['title'])) {
+            $uri = $chunk['web']['uri'];
+            $title = $chunk['web']['title'];
+            // Avoid duplicates
+            if (!isset($sources[$uri])) {
+                $sources[$uri] = $title;
+            }
+        }
+    }
+}
+
+// Append sources to the reply if any were found
+if (!empty($sources)) {
+    $botReply .= "\n\n---\n🔗 **Sources:**\n";
+    foreach ($sources as $url => $title) {
+        $botReply .= "• [$title]($url)\n";
+    }
+}
 
 echo json_encode([
     'status' => 'success',

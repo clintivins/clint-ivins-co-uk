@@ -989,9 +989,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = `bot-message ${sender}`;
 
-            // Simple markdown-to-HTML conversion for natural feel
+            // Markdown-to-HTML conversion for rich bot responses
             let formattedText = text
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color: var(--neon-cyan); text-decoration: underline;">$1</a>') // Links
+                .replace(/^### (.+)$/gm, '<strong style="color: var(--neon-cyan); font-size: 1rem; display: block; margin-top: 0.8rem;">$1</strong>') // H3
+                .replace(/^#### (.+)$/gm, '<strong style="color: var(--neon-gold, #ffd700); font-size: 0.95rem; display: block; margin-top: 0.6rem;">$1</strong>') // H4
+                .replace(/^---$/gm, '<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 0.8rem 0;">') // HR
+                .replace(/^[\u2022\-\*] (.+)$/gm, '<span style="display: block; padding-left: 1rem; text-indent: -0.6rem;">• $1</span>') // Bullets
+                .replace(/^\d+\. (.+)$/gm, function (match) { return '<span style="display: block; padding-left: 1rem;">' + match + '</span>'; }) // Numbered lists
                 .replace(/\n/g, '<br>'); // Line breaks
 
             div.innerHTML = formattedText;
