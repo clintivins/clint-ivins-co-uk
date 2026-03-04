@@ -1725,18 +1725,18 @@ footer {
 }
 
 .map-brand-topleft {
-    top: 0.5rem;
-    left: 0.5rem;
+    top: 0;
+    left: 0;
+    right: 0;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.9);
     letter-spacing: 3px;
     text-transform: uppercase;
     font-family: var(--font-mono);
     font-weight: 700;
-    border-radius: 12px 0 8px 0;
-    padding: 10px 60px 10px 20px;
-    min-width: 280px;
-    background: rgba(10, 10, 20, 0.98);
+    border-radius: 12px 12px 0 0;
+    padding: 12px 20px;
+    background: #1a1a2e;
 }
 
 .threat-map-container {
