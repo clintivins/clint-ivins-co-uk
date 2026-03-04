@@ -117,12 +117,28 @@ $sources = [];
 if (isset($responseData['candidates'][0]['groundingMetadata']['groundingChunks'])) {
     foreach ($responseData['candidates'][0]['groundingMetadata']['groundingChunks'] as $chunk) {
         if (isset($chunk['web']['uri']) && isset($chunk['web']['title'])) {
+            $title = trim($chunk['web']['title']);
             $uri = $chunk['web']['uri'];
-            $title = $chunk['web']['title'];
-            // Avoid duplicates
-            if (!isset($sources[$uri])) {
-                $sources[$uri] = $title;
+            
+            // Extract domain from title or URI for dedup and clean link
+            // Try to find a domain pattern in the title (e.g. "Article - SiteName")
+            // If title looks like a domain (contains a dot, no spaces), use it directly
+            if (preg_match('/^[a-zA-Z0-9.-]+\.[a-z]{2,}$/', $title)) {
+                $domain = $title;
+            } else {
+                // Extract domain from the URI if possible
+                $parsedUrl = parse_url($uri);
+                $domain = $parsedUrl['host'] ?? $title;
             }
+            
+            // Skip if we already have this domain
+            if (isset($sources[$domain])) continue;
+            
+            $cleanUrl = 'https://' . $domain;
+            $sources[$domain] = ['title' => $title, 'url' => $cleanUrl];
+            
+            // Limit to 5 sources
+            if (count($sources) >= 5) break;
         }
     }
 }
@@ -130,8 +146,8 @@ if (isset($responseData['candidates'][0]['groundingMetadata']['groundingChunks']
 // Append sources to the reply if any were found
 if (!empty($sources)) {
     $botReply .= "\n\n---\n🔗 **Sources:**\n";
-    foreach ($sources as $url => $title) {
-        $botReply .= "• [$title]($url)\n";
+    foreach ($sources as $domain => $info) {
+        $botReply .= "• [{$info['title']}]({$info['url']})\n";
     }
 }
 
