@@ -281,7 +281,7 @@
 
         .video-card .thumb-wrapper {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 52%;
             background: #000;
         }
 
@@ -291,7 +291,7 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .video-card .thumb-wrapper .play-overlay {
@@ -316,11 +316,11 @@
         }
 
         .video-card .card-body {
-            padding: 1.25rem;
+            padding: 1rem 1.25rem 1.25rem;
         }
 
         .video-card .card-body h3 {
-            font-size: 1rem;
+            font-size: 0.98rem;
             margin-bottom: 0.4rem;
             color: #fff;
         }
@@ -329,7 +329,7 @@
             font-size: 0.82rem;
             color: var(--text-muted);
             line-height: 1.5;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.75rem;
         }
 
         /* Duration badge */
@@ -422,7 +422,7 @@
                 your own pace.</p>
             <div class="portal-stats">
                 <div class="portal-stat">
-                    <span class="num" id="video-count">1</span>
+                    <span class="num" id="video-count">3</span>
                     <span class="lbl">Videos</span>
                 </div>
                 <div class="portal-stat">
@@ -476,11 +476,48 @@
             </div>
         </div>
 
-        <!-- More Videos Grid (ready for new videos to be added) -->
-        <div id="video-grid-section" style="display:none;">
-            <div class="section-label"><i class="fas fa-film"></i> All Videos</div>
+        <!-- More Videos Grid -->
+        <div id="video-grid-section">
+            <div class="section-label"><i class="fas fa-film"></i> More Videos</div>
             <div class="video-grid" id="video-grid">
-                <!-- Additional video cards injected here -->
+
+                <!-- MFA Fatigue -->
+                <div class="video-card" data-cat="identity mitre awareness">
+                    <div class="thumb-wrapper">
+                        <video controls preload="metadata">
+                            <source src="assets/videos/Video_on_MFA_Fatigue_Generated.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3><i class="fas fa-mobile-alt" style="color:#bd00ff;"></i> MFA Fatigue Attacks</h3>
+                        <p>How attackers exploit push notification overload to bypass Multi-Factor Authentication — and
+                            how defenders can stop it.</p>
+                        <div class="video-tags">
+                            <span class="video-tag">Identity Security</span>
+                            <span class="video-tag cyan">T1621</span>
+                            <span class="video-tag gold">MFA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animated Surfer Dude -->
+                <div class="video-card" data-cat="awareness social-engineering">
+                    <div class="thumb-wrapper">
+                        <video controls preload="metadata">
+                            <source src="assets/videos/Animated_Surfer_Dude_Video_Generated.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3><i class="fas fa-water" style="color:#00f3ff;"></i> Cyber Awareness — Surfer Style</h3>
+                        <p>An animated breakdown of everyday cyber hygiene tips delivered with a laid-back surfer vibe.
+                            Stay safe, stay stoked. 🤙</p>
+                        <div class="video-tags">
+                            <span class="video-tag">Awareness</span>
+                            <span class="video-tag cyan">Animated</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
