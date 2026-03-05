@@ -143,52 +143,37 @@
         }
         #gordie-chat .g-close:hover { color: #fff; }
 
-        /* Login Overlay */
-        #gordie-chat .g-login {
-            position: absolute;
-            inset: 0;
-            background: rgba(10,10,20,0.98);
-            z-index: 10;
+        /* Header actions */
+        #gordie-chat .g-header-controls {
             display: flex;
-            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+        #gordie-chat .g-action-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px;
+            transition: color 0.2s;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            gap: 12px;
         }
-        #gordie-chat .g-login.g-hidden { display: none; }
-        #gordie-chat .g-login i { font-size: 2.5rem; color: #bd00ff; }
-        #gordie-chat .g-login h3 { color: #fff; margin: 0; font-size: 1.1rem; }
-        #gordie-chat .g-login p { color: rgba(255,255,255,0.5); margin: 0; font-size: 0.85rem; }
-        #gordie-chat .g-login input {
-            width: 100%;
-            padding: 10px 14px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        #gordie-chat .g-login input:focus { border-color: #bd00ff; }
-        #gordie-chat .g-login button {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(135deg, #bd00ff, #7b00e0);
+        #gordie-chat .g-action-btn:hover { color: #fff; }
+
+        /* Reasoning Panel Close */
+        .g-applet-close {
+            background: none;
             border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-weight: 600;
+            color: rgba(255,255,255,0.5);
             cursor: pointer;
-            transition: opacity 0.2s;
+            font-size: 1.0rem;
+            padding: 4px;
+            transition: color 0.2s;
         }
-        #gordie-chat .g-login button:hover { opacity: 0.85; }
-        #gordie-chat .g-login-error {
-            color: #ff4444;
-            font-size: 0.8rem;
-            display: none;
-        }
+        .g-applet-close:hover { color: #fff; }
 
         /* Messages */
         #gordie-chat .g-messages {
@@ -421,18 +406,12 @@
     const chat = document.createElement('div');
     chat.id = 'gordie-chat';
     chat.innerHTML = `
-        <div class="g-login" id="g-login">
-            <i class="fas fa-user-shield"></i>
-            <h3>Access Restricted</h3>
-            <p>Identify yourself to Gordie</p>
-            <input type="text" id="g-username" placeholder="Username" autocomplete="off">
-            <input type="password" id="g-password" placeholder="Password">
-            <button id="g-login-btn">Authenticate</button>
-            <div class="g-login-error" id="g-login-error">Invalid credentials.</div>
-        </div>
         <div class="g-header">
             <div class="g-header-title">😊 GORDIE</div>
-            <button class="g-close" id="g-close" title="Close"><i class="fas fa-minus"></i></button>
+            <div class="g-header-controls">
+                <button class="g-action-btn" id="g-clear" title="New Chat"><i class="fas fa-trash-alt"></i></button>
+                <button class="g-action-btn" id="g-close" title="Close"><i class="fas fa-minus"></i></button>
+            </div>
         </div>
         <div class="g-messages" id="g-messages">
             <div class="g-msg system">Hey there dude! 🤙 Gordie here — your cyber-savvy surfer bro. Ask me anything about identity security, MITRE ATT&CK, or the latest threats!</div>
@@ -446,16 +425,11 @@
 
     // ===== LOGIC =====
     let isOpen = false;
-    let isAuth = false;
     const msgArea = document.getElementById('g-messages');
     const input = document.getElementById('g-input');
     const sendBtn = document.getElementById('g-send');
-    const loginOverlay = document.getElementById('g-login');
-    const usernameInput = document.getElementById('g-username');
-    const passwordInput = document.getElementById('g-password');
-    const loginBtn = document.getElementById('g-login-btn');
-    const loginError = document.getElementById('g-login-error');
     const closeBtn = document.getElementById('g-close');
+    const clearBtn = document.getElementById('g-clear');
 
     // Toggle
     trigger.onclick = () => {
@@ -465,8 +439,7 @@
         if (!isOpen) {
             reasoningApplet.classList.remove('g-applet-visible');
         }
-        if (isOpen && !isAuth) usernameInput.focus();
-        if (isOpen && isAuth) input.focus();
+        if (isOpen) input.focus();
     };
 
     closeBtn.onclick = () => {
@@ -476,22 +449,11 @@
         reasoningApplet.classList.remove('g-applet-visible');
     };
 
-    // Login
-    const handleLogin = () => {
-        if (usernameInput.value.trim() === 'Gandolf' && passwordInput.value.trim() === '@@Thunder_55') {
-            isAuth = true;
-            loginOverlay.classList.add('g-hidden');
-            loginError.style.display = 'none';
-            input.focus();
-        } else {
-            loginError.style.display = 'block';
-            passwordInput.value = '';
-        }
+    clearBtn.onclick = () => {
+        msgArea.innerHTML = '<div class="g-msg system">Hey there dude! 🤙 Gordie here — your cyber-savvy surfer bro. Ask me anything about identity security, MITRE ATT&CK, or the latest threats!</div>';
+        reasoningApplet.classList.remove('g-applet-visible');
+        input.focus();
     };
-    loginBtn.onclick = handleLogin;
-    [usernameInput, passwordInput].forEach(el => {
-        el.onkeypress = (e) => { if (e.key === 'Enter') handleLogin(); };
-    });
 
     // Markdown renderer
     function renderMarkdown(text) {
@@ -574,14 +536,19 @@
 
         panel.innerHTML = `
             <div class="g-thinking-header" id="g-thinking-header">
-                <span class="g-thinking-spinner"></span>
-                AGENTIC REASONING STREAM
+                <div style="display:flex; align-items:center;"><span class="g-thinking-spinner"></span> AGENTIC REASONING STREAM</div>
+                <button class="g-applet-close" id="g-applet-close" title="Close Stream"><i class="fas fa-times"></i></button>
             </div>
             <div class="g-thinking-steps-container" id="g-thinking-steps-container"></div>
             <div class="g-cursor-line" id="g-cursor-line"><span class="g-cursor"></span></div>
             <div class="g-reasoning-content" id="g-reasoning-content"></div>
         `;
         panel.classList.remove('complete');
+
+        document.getElementById('g-applet-close').onclick = () => {
+            reasoningApplet.classList.remove('g-applet-visible');
+        };
+
         return panel;
     }
 
@@ -683,7 +650,6 @@
 
     // Send
     async function handleSend() {
-        if (!isAuth) return;
         const q = input.value.trim();
         if (!q) return;
         addMsg(q, 'user');
