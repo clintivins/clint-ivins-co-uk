@@ -335,10 +335,12 @@
         <div class="glass-panel">
             <h2>Join the Nomad Tribe</h2>
             <p>Get the latest updates on tech trends, travel guides, and food spots directly to your inbox.</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email...">
-                <button type="submit">Subscribe</button>
+            <form class="newsletter-form" id="newsletter-form">
+                <input type="email" name="email" id="nl-email" placeholder="Enter your email..." required>
+                <button type="submit" id="nl-submit">Subscribe</button>
             </form>
+            <div id="nl-status" style="margin-top: 15px; text-align: center; color: var(--neon-cyan); height: 20px;">
+            </div>
             <div class="social-links">
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
@@ -353,7 +355,44 @@
     </footer>
 
     <script src="script.js?v=2.0"></script>
-    <script src="gordie.js?v=2.3"></script>
+    <script src="gordie.js?v=2.4"></script>
+    <script>
+        document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('nl-submit');
+            const status = document.getElementById('nl-status');
+            const emailInput = document.getElementById('nl-email');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            status.style.color = 'var(--neon-cyan)';
+            status.textContent = 'Joining the tribe...';
+
+            try {
+                const res = await fetch('subscribe.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'email=' + encodeURIComponent(emailInput.value)
+                });
+                const text = await res.text();
+
+                status.textContent = text;
+
+                if (text.includes('Welcome')) {
+                    status.style.color = '#00ffaa'; // Success green
+                    emailInput.value = '';
+                } else {
+                    status.style.color = 'var(--neon-gold)'; // Warn
+                }
+            } catch (err) {
+                status.style.color = '#ff4444'; // Error
+                status.textContent = 'Connection error. Try again dude.';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Subscribe';
+            }
+        });
+    </script>
 
     <!-- WidgetBot Crate (Discord Chat Bubble) -->
     <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async defer>
