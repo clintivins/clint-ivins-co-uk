@@ -169,5 +169,6 @@ if (!empty($sources)) {
 echo json_encode([
     'status' => 'success',
     'message' => $botReply,
-    'thinking' => $thinkingText
+    'thinking' => $thinkingText,
+    'sources' => array_values($sources)
 ]);

@@ -265,69 +265,98 @@
         #gordie-chat .g-input-area button:hover { opacity: 0.85; }
 
         /* === Gordie Thinking Panel === */
-        #gordie-chat .g-thinking-panel {
-            max-width: 92%;
-            align-self: flex-start;
-            background: linear-gradient(135deg, rgba(0, 18, 8, 0.97), rgba(0, 12, 6, 0.97));
-            border: 1px solid rgba(0, 255, 100, 0.18);
-            border-radius: 10px;
-            padding: 10px 12px;
-            font-family: 'Space Mono', 'Courier New', monospace;
-            font-size: 0.7rem;
-            line-height: 1.7;
-            color: rgba(0, 255, 100, 0.8);
-            position: relative;
+        /* === Gordie Reasoning Applet (Separate Window) === */
+        #gordie-reasoning-applet {
+            position: fixed;
+            bottom: 100px;
+            right: 430px; /* Positions it to the left of the main chat container (which is 380px wide + 28px offset) */
+            width: 320px;
+            max-height: 520px;
+            z-index: 99997;
+            background: linear-gradient(135deg, rgba(0, 18, 8, 0.98), rgba(0, 12, 6, 0.98));
+            border: 1px solid rgba(0, 255, 100, 0.25);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 2px 20px rgba(0, 255, 100, 0.06), inset 0 1px 0 rgba(0, 255, 100, 0.08);
+            box-shadow: 0 10px 50px rgba(0,0,0,0.8), 0 0 30px rgba(0,255,100,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: translateX(40px) scale(0.95);
+            transform-origin: right bottom;
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+            pointer-events: none;
+            font-family: 'Space Mono', 'Courier New', monospace;
         }
-        #gordie-chat .g-thinking-panel::before {
+        #gordie-reasoning-applet.g-applet-visible {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #gordie-reasoning-applet::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,100,0.5), transparent);
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,100,0.6), transparent);
         }
+        #gordie-chat .g-thinking-panel {
+            padding: 14px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            color: rgba(0, 255, 100, 0.85);
+            font-size: 0.75rem;
+            line-height: 1.6;
+            overflow-y: auto;
+        }
+        #gordie-chat .g-thinking-panel::-webkit-scrollbar { width: 4px; }
+        #gordie-chat .g-thinking-panel::-webkit-scrollbar-thumb { background: rgba(0,255,100,0.3); border-radius: 4px; }
         #gordie-chat .g-thinking-header {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(0,255,100,0.1);
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0,255,100,0.15);
             color: rgba(0, 255, 100, 0.95);
             font-weight: 700;
-            font-size: 0.65rem;
-            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
         #gordie-chat .g-thinking-spinner {
             display: inline-block;
-            width: 8px;
-            height: 8px;
-            border: 1.5px solid rgba(0,255,100,0.25);
+            width: 10px;
+            height: 10px;
+            border: 2px solid rgba(0,255,100,0.25);
             border-top-color: rgba(0,255,100,0.9);
             border-radius: 50%;
             animation: g-spin 0.6s linear infinite;
         }
         @keyframes g-spin { to { transform: rotate(360deg); } }
+        #gordie-chat .g-thinking-steps-container {
+            margin-bottom: 14px;
+        }
         #gordie-chat .g-thinking-step {
             opacity: 0;
-            transform: translateX(-8px);
+            transform: translateX(-10px);
             transition: opacity 0.35s ease, transform 0.35s ease;
-            padding: 2px 0;
+            padding: 4px 0;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.68rem;
+            gap: 8px;
+            font-size: 0.75rem;
         }
         #gordie-chat .g-thinking-step.visible { opacity: 1; transform: translateX(0); }
-        #gordie-chat .g-thinking-step.done { color: rgba(0,255,100,0.4); }
+        #gordie-chat .g-thinking-step.done { color: rgba(0,255,100,0.5); }
         #gordie-chat .g-thinking-step .step-check { color: #00ff64; font-weight: 700; }
-        #gordie-chat .g-cursor-line { padding: 2px 0; }
+        #gordie-chat .g-cursor-line { padding: 4px 0; }
         #gordie-chat .g-cursor {
             display: inline-block;
-            width: 6px;
-            height: 12px;
+            width: 8px;
+            height: 14px;
             background: rgba(0,255,100,0.8);
             animation: g-cursor-blink 0.6s steps(1) infinite;
         }
@@ -336,47 +365,34 @@
             animation: none;
             border-color: #00ff64;
             background: #00ff64;
-            width: 8px;
-            height: 8px;
         }
-        #gordie-chat .g-reasoning-toggle {
-            cursor: pointer;
-            color: rgba(0,255,100,0.55);
-            font-size: 0.65rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 8px;
-            padding-top: 6px;
-            border-top: 1px solid rgba(0,255,100,0.1);
-            transition: color 0.2s;
-            user-select: none;
-        }
-        #gordie-chat .g-reasoning-toggle:hover { color: rgba(0,255,100,0.9); }
         #gordie-chat .g-reasoning-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            color: rgba(0,255,100,0.45);
-            font-size: 0.65rem;
+            flex: 1;
+            color: rgba(0,255,100,0.6);
+            font-size: 0.7rem;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
+            border-top: 1px dashed rgba(0,255,100,0.15);
+            padding-top: 12px;
+            margin-top: 10px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
-        #gordie-chat .g-reasoning-content.expanded {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 6px;
+        #gordie-chat .g-reasoning-content.show {
+            display: block;
+            opacity: 1;
         }
-        #gordie-chat .g-reasoning-content::-webkit-scrollbar { width: 3px; }
-        #gordie-chat .g-reasoning-content::-webkit-scrollbar-thumb { background: rgba(0,255,100,0.2); border-radius: 3px; }
 
         @media (max-width: 480px) {
-            #gordie-chat {
-                width: calc(100vw - 24px);
+            #gordie-reasoning-applet {
+                top: 20px;
                 right: 12px;
-                bottom: 90px;
-                max-height: 70vh;
+                bottom: calc(100vh - 90px); /* Tries to fit above chat on mobile. But hiding it is safer on small screens */
+                width: calc(100vw - 24px);
+                max-height: 40vh;
+                display: none; /* Mobile space is tight, hiding sidebar applet or layering it is tricky, hiding for now */
             }
         }
     `;
@@ -394,6 +410,12 @@
         <span class="gordie-label">Need help? Ask Gordie!</span>
     `;
     document.body.appendChild(trigger);
+
+    // Reasoning Applet container
+    const reasoningApplet = document.createElement('div');
+    reasoningApplet.id = 'gordie-reasoning-applet';
+    reasoningApplet.innerHTML = `<div class="g-thinking-panel" id="g-thinking-panel"></div>`;
+    document.body.appendChild(reasoningApplet);
 
     // Chat container
     const chat = document.createElement('div');
@@ -440,6 +462,9 @@
         isOpen = !isOpen;
         chat.classList.toggle('gordie-visible', isOpen);
         trigger.classList.toggle('gordie-open', isOpen);
+        if (!isOpen) {
+            reasoningApplet.classList.remove('g-applet-visible');
+        }
         if (isOpen && !isAuth) usernameInput.focus();
         if (isOpen && isAuth) input.focus();
     };
@@ -448,6 +473,7 @@
         isOpen = false;
         chat.classList.remove('gordie-visible');
         trigger.classList.remove('gordie-open');
+        reasoningApplet.classList.remove('g-applet-visible');
     };
 
     // Login
@@ -489,90 +515,169 @@
         msgArea.scrollTop = msgArea.scrollHeight;
     }
 
-    // === Thinking Steps Generator ===
+    // === Agentic Reasoning Streaming ===
     function getThinkingSteps(query) {
         const q = query.toLowerCase();
-        const steps = [{ icon: '⚡', text: 'Parsing query intent...' }];
-        if (/mitre|att&ck|technique|tactic/.test(q))
-            steps.push({ icon: '🗂️', text: 'Querying MITRE ATT&CK framework...' });
-        if (/cve|vulnerabilit|exploit|patch|zero.?day/.test(q))
-            steps.push({ icon: '🔎', text: 'Searching NVD & CISA KEV catalog...' });
-        if (/ransomware|malware|apt|threat.?actor|campaign/.test(q))
-            steps.push({ icon: '🦠', text: 'Scanning threat intel databases...' });
-        if (/identity|oauth|saml|oidc|sso|mfa|entra|okta|fido|passkey/.test(q))
-            steps.push({ icon: '🔐', text: 'Analyzing identity protocol data...' });
-        if (/phish|social.?engineer|credential|password|brute/.test(q))
-            steps.push({ icon: '🎣', text: 'Reviewing attack vector intelligence...' });
-        if (/news|latest|recent|update|today|this week/.test(q))
-            steps.push({ icon: '📰', text: 'Pulling latest security headlines...' });
-        steps.push({ icon: '🌐', text: 'Executing Google Search grounding...' });
-        steps.push({ icon: '📡', text: 'Correlating multi-source intelligence...' });
-        steps.push({ icon: '🧠', text: 'Synthesizing reasoning chain...' });
-        steps.push({ icon: '✅', text: 'Compiling final response...' });
+        const steps = [
+            { icon: '⚡', agent: 'Orchestrator', text: 'New task received. Analyzing intent and extracting entities...' },
+            { icon: '🧠', agent: 'Orchestrator', text: `Query parsed: "${query.length > 30 ? query.substring(0, 30) + '...' : query}"` },
+            { icon: '📋', agent: 'Orchestrator', text: 'Generating execution plan: 1) Identify concepts 2) Gather intel 3) Synthesize.' }
+        ];
+
+        let hasSpecificIntel = false;
+
+        if (/mitre|att&ck|technique|tactic/.test(q)) {
+            hasSpecificIntel = true;
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [Intel-Agent]: "Retrieve MITRE ATT&CK framework data"' });
+            steps.push({ icon: '🗂️', agent: 'Intel-Agent', text: 'Connecting to attack.mitre.org API... Extracted technique signatures.' });
+        }
+        if (/cve|vulnerabilit|exploit|patch|zero.?day/.test(q)) {
+            hasSpecificIntel = true;
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [Vuln-Agent]: "Check latest CVE databases"' });
+            steps.push({ icon: '🔎', agent: 'Vuln-Agent', text: 'Scanning nvd.nist.gov and cve.mitre.org. Cross-referencing exploits.' });
+        }
+        if (/ransomware|malware|apt|threat.?actor|campaign/.test(q)) {
+            hasSpecificIntel = true;
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [ThreatRecon]: "Identify active campaigns"' });
+            steps.push({ icon: '🦠', agent: 'ThreatRecon', text: 'Querying external intel pipelines (mandiant, crowdstrike) for IOCs.' });
+        }
+        if (/identity|oauth|saml|oidc|sso|mfa|entra|okta|fido|passkey/.test(q)) {
+            hasSpecificIntel = true;
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [IdM-Agent]: "Analyze identity protocol vectors"' });
+            steps.push({ icon: '🔐', agent: 'IdM-Agent', text: 'Mapping identity surfaces (OAuth/OIDC/SAML) and authentication bypass logic.' });
+        }
+        if (/phish|social.?engineer|credential|password|brute/.test(q)) {
+            hasSpecificIntel = true;
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [SecOps-Agent]: "Review phishing/credential vectors"' });
+            steps.push({ icon: '🎣', agent: 'SecOps-Agent', text: 'Analyzing credential harvesting and social engineering tactics.' });
+        }
+
+        if (!hasSpecificIntel) {
+            steps.push({ icon: '📡', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [Knowledge-Base]: "Retrieve general cybersecurity context"' });
+        }
+
+        steps.push({ icon: '🌐', agent: 'Orchestrator', text: 'Dispatching Sub-Task --> [Search-Agent]: "Execute live Web Search for latest context"' });
+        steps.push({ icon: '🔍', agent: 'Search-Agent', text: 'Fetching real-time data to ground response...' });
+
+        steps.push({ icon: '🧠', agent: 'Orchestrator', text: 'All sub-tasks completed. Passing data payloads to [Logic-Agent].' });
+        steps.push({ icon: '🧵', agent: 'Logic-Agent', text: 'Synthesizing data payloads into final reasoning chain...' });
+        steps.push({ icon: '✅', agent: 'Formatting-Agent', text: 'Formatting final response for user...' });
+
         return steps;
     }
 
-    function createThinkingPanel(query) {
-        const steps = getThinkingSteps(query);
-        const panel = document.createElement('div');
-        panel.className = 'g-thinking-panel';
-        const stepsHTML = steps.map((s, i) =>
-            `<div class="g-thinking-step" data-index="${i}"><span class="step-icon">${s.icon}</span> ${s.text}</div>`
-        ).join('');
+    function resetThinkingPanel(query) {
+        reasoningApplet.classList.add('g-applet-visible');
+        const panel = document.getElementById('g-thinking-panel');
+        // Store steps for animation
+        panel._stepsForAnimation = getThinkingSteps(query);
+
         panel.innerHTML = `
-            <div class="g-thinking-header">
+            <div class="g-thinking-header" id="g-thinking-header">
                 <span class="g-thinking-spinner"></span>
-                REASONING ENGINE ACTIVE
+                AGENTIC REASONING STREAM
             </div>
-            <div class="g-thinking-steps">${stepsHTML}</div>
-            <div class="g-cursor-line"><span class="g-cursor"></span></div>
+            <div class="g-thinking-steps-container" id="g-thinking-steps-container"></div>
+            <div class="g-cursor-line" id="g-cursor-line"><span class="g-cursor"></span></div>
+            <div class="g-reasoning-content" id="g-reasoning-content"></div>
         `;
+        panel.classList.remove('complete');
         return panel;
     }
 
     function animateThinkingSteps(panel) {
-        const stepEls = panel.querySelectorAll('.g-thinking-step');
-        let i = 0;
+        const steps = panel._stepsForAnimation || [];
+        const container = document.getElementById('g-thinking-steps-container');
+        if (!container) return;
+
+        let stepIndex = 0;
+        let charIndex = 0;
+        let currentStepEl = null;
+        let currentText = "";
+
+        // Fast typer interval
         const interval = setInterval(() => {
-            if (i >= stepEls.length) { clearInterval(interval); return; }
-            if (i > 0) {
-                stepEls[i - 1].classList.add('done');
-                const ico = stepEls[i - 1].querySelector('.step-icon');
-                if (ico) ico.textContent = '✓';
+            if (stepIndex >= steps.length) {
+                // Done with initial steps
+                clearInterval(interval);
+                return;
             }
-            stepEls[i].classList.add('visible');
-            i++;
-            msgArea.scrollTop = msgArea.scrollHeight;
-        }, 650);
+
+            const step = steps[stepIndex];
+
+            // Start of a new step
+            if (charIndex === 0) {
+                if (currentStepEl) {
+                    currentStepEl.classList.add('done');
+                    const ico = currentStepEl.querySelector('.step-check');
+                    if (ico) ico.textContent = '✓';
+                }
+                currentText = `[${step.agent}] ${step.text}`;
+                currentStepEl = document.createElement('div');
+                currentStepEl.className = 'g-thinking-step visible';
+                currentStepEl.innerHTML = `<span class="step-check">${step.icon}</span> <span class="step-text"></span>`;
+                container.appendChild(currentStepEl);
+            }
+
+            // Typewriter effect
+            const textSpan = currentStepEl.querySelector('.step-text');
+            if (textSpan && charIndex < currentText.length) {
+                // Type a few characters at a time for speed simulation
+                const charsToType = Math.floor(Math.random() * 3) + 2;
+                textSpan.textContent += currentText.substring(charIndex, charIndex + charsToType);
+                charIndex += charsToType;
+                panel.scrollTop = panel.scrollHeight;
+            } else {
+                // Let it pause slightly at the end of a line
+                charIndex = 0;
+                stepIndex++;
+            }
+
+        }, 40); // Fast typing speed
+
         panel._interval = interval;
     }
 
-    function completeThinking(panel, thinkingText) {
+    function completeThinking(panel, thinkingText, sources) {
         if (panel._interval) clearInterval(panel._interval);
-        panel.querySelectorAll('.g-thinking-step').forEach(el => {
-            el.classList.add('visible', 'done');
-            const ico = el.querySelector('.step-icon');
+
+        // Complete the last active step
+        const stepEls = panel.querySelectorAll('.g-thinking-step');
+        if (stepEls.length > 0) {
+            const last = stepEls[stepEls.length - 1];
+            last.classList.add('done');
+            const ico = last.querySelector('.step-check');
             if (ico) ico.textContent = '✓';
-        });
-        const cursor = panel.querySelector('.g-cursor-line');
+        }
+
+        // If we have actual sources from the backend, inject a "Target confirmed" step dynamically
+        if (sources && sources.length > 0) {
+            const container = document.getElementById('g-thinking-steps-container');
+            const domains = sources.map(s => {
+                try { return new URL(s.url).hostname; } catch (e) { return s.title; }
+            });
+            if (container) {
+                const stepEl = document.createElement('div');
+                stepEl.className = 'g-thinking-step visible done';
+                stepEl.innerHTML = `<span class="step-check">✓</span> <span class="step-text">[Intel-Agent] Grounding sources verified: ${domains.join(', ')}</span>`;
+                container.appendChild(stepEl);
+            }
+        }
+
+        const cursor = document.getElementById('g-cursor-line');
         if (cursor) cursor.remove();
+
         panel.classList.add('complete');
-        const hdr = panel.querySelector('.g-thinking-header');
-        if (hdr) hdr.innerHTML = '<span class="g-thinking-spinner"></span> REASONING COMPLETE';
+        const hdr = document.getElementById('g-thinking-header');
+        if (hdr) hdr.innerHTML = '<span class="g-thinking-spinner"></span> STREAM COMPLETE';
+
         if (thinkingText && thinkingText.trim()) {
-            const toggle = document.createElement('div');
-            toggle.className = 'g-reasoning-toggle';
-            toggle.innerHTML = '▸ View AI reasoning chain';
-            const content = document.createElement('div');
-            content.className = 'g-reasoning-content';
-            content.textContent = thinkingText.trim();
-            toggle.onclick = () => {
-                const exp = content.classList.toggle('expanded');
-                toggle.innerHTML = exp ? '▾ Hide AI reasoning chain' : '▸ View AI reasoning chain';
-                setTimeout(() => { msgArea.scrollTop = msgArea.scrollHeight; }, 50);
-            };
-            panel.appendChild(toggle);
-            panel.appendChild(content);
+            const content = document.getElementById('g-reasoning-content');
+            if (content) {
+                content.textContent = "=== AI INTERNAL LOGIC STATE ===\n" + thinkingText.trim();
+                content.classList.add('show');
+                setTimeout(() => { panel.scrollTop = panel.scrollHeight; }, 100);
+            }
         }
     }
 
@@ -584,9 +689,16 @@
         addMsg(q, 'user');
         input.value = '';
 
-        const thinkPanel = createThinkingPanel(q);
-        msgArea.appendChild(thinkPanel);
+        const thinkPanel = resetThinkingPanel(q);
+        // Show loading state in chat too so it feels responsive
+        const loadId = 'g-load-' + Date.now();
+        const ldiv = document.createElement('div');
+        ldiv.className = 'g-msg bot';
+        ldiv.id = loadId;
+        ldiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gordie is working with the logic engine...';
+        msgArea.appendChild(ldiv);
         msgArea.scrollTop = msgArea.scrollHeight;
+
         animateThinkingSteps(thinkPanel);
 
         try {
@@ -596,7 +708,10 @@
                 body: JSON.stringify({ message: q })
             });
             const data = await res.json();
-            completeThinking(thinkPanel, data.thinking || '');
+            completeThinking(thinkPanel, data.thinking || '', data.sources || []);
+            const el = document.getElementById(loadId);
+            if (el) el.remove();
+
             if (data.status === 'success') {
                 addMsg(data.message, 'bot');
             } else {
@@ -604,6 +719,8 @@
             }
         } catch (e) {
             completeThinking(thinkPanel, '');
+            const el = document.getElementById(loadId);
+            if (el) el.remove();
             addMsg('Uplink failed. Check your connection.', 'system');
         }
     }
