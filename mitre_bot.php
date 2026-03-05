@@ -109,8 +109,23 @@ if ($httpCode !== 200) {
     exit;
 }
 
-// Extract the response text
-$botReply = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? 'Data retrieval interrupted.';
+// Extract thinking and response from parts
+$botReply = '';
+$thinkingText = '';
+
+if (isset($responseData['candidates'][0]['content']['parts'])) {
+    foreach ($responseData['candidates'][0]['content']['parts'] as $part) {
+        if (isset($part['thought']) && $part['thought'] === true) {
+            $thinkingText .= $part['text'];
+        } else if (isset($part['text'])) {
+            $botReply .= $part['text'];
+        }
+    }
+}
+
+if (empty($botReply)) {
+    $botReply = 'Data retrieval interrupted.';
+}
 
 // Extract grounding source URLs from the API response and append them
 $sources = [];
@@ -153,5 +168,6 @@ if (!empty($sources)) {
 
 echo json_encode([
     'status' => 'success',
-    'message' => $botReply
+    'message' => $botReply,
+    'thinking' => $thinkingText
 ]);

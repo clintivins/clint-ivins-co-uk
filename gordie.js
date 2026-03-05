@@ -264,6 +264,113 @@
         }
         #gordie-chat .g-input-area button:hover { opacity: 0.85; }
 
+        /* === Gordie Thinking Panel === */
+        #gordie-chat .g-thinking-panel {
+            max-width: 92%;
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(0, 18, 8, 0.97), rgba(0, 12, 6, 0.97));
+            border: 1px solid rgba(0, 255, 100, 0.18);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: 'Space Mono', 'Courier New', monospace;
+            font-size: 0.7rem;
+            line-height: 1.7;
+            color: rgba(0, 255, 100, 0.8);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0, 255, 100, 0.06), inset 0 1px 0 rgba(0, 255, 100, 0.08);
+        }
+        #gordie-chat .g-thinking-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,100,0.5), transparent);
+        }
+        #gordie-chat .g-thinking-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(0,255,100,0.1);
+            color: rgba(0, 255, 100, 0.95);
+            font-weight: 700;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        #gordie-chat .g-thinking-spinner {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border: 1.5px solid rgba(0,255,100,0.25);
+            border-top-color: rgba(0,255,100,0.9);
+            border-radius: 50%;
+            animation: g-spin 0.6s linear infinite;
+        }
+        @keyframes g-spin { to { transform: rotate(360deg); } }
+        #gordie-chat .g-thinking-step {
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            padding: 2px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.68rem;
+        }
+        #gordie-chat .g-thinking-step.visible { opacity: 1; transform: translateX(0); }
+        #gordie-chat .g-thinking-step.done { color: rgba(0,255,100,0.4); }
+        #gordie-chat .g-thinking-step .step-check { color: #00ff64; font-weight: 700; }
+        #gordie-chat .g-cursor-line { padding: 2px 0; }
+        #gordie-chat .g-cursor {
+            display: inline-block;
+            width: 6px;
+            height: 12px;
+            background: rgba(0,255,100,0.8);
+            animation: g-cursor-blink 0.6s steps(1) infinite;
+        }
+        @keyframes g-cursor-blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+        #gordie-chat .g-thinking-panel.complete .g-thinking-spinner {
+            animation: none;
+            border-color: #00ff64;
+            background: #00ff64;
+            width: 8px;
+            height: 8px;
+        }
+        #gordie-chat .g-reasoning-toggle {
+            cursor: pointer;
+            color: rgba(0,255,100,0.55);
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(0,255,100,0.1);
+            transition: color 0.2s;
+            user-select: none;
+        }
+        #gordie-chat .g-reasoning-toggle:hover { color: rgba(0,255,100,0.9); }
+        #gordie-chat .g-reasoning-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            color: rgba(0,255,100,0.45);
+            font-size: 0.65rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        #gordie-chat .g-reasoning-content.expanded {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 6px;
+        }
+        #gordie-chat .g-reasoning-content::-webkit-scrollbar { width: 3px; }
+        #gordie-chat .g-reasoning-content::-webkit-scrollbar-thumb { background: rgba(0,255,100,0.2); border-radius: 3px; }
+
         @media (max-width: 480px) {
             #gordie-chat {
                 width: calc(100vw - 24px);
@@ -382,6 +489,93 @@
         msgArea.scrollTop = msgArea.scrollHeight;
     }
 
+    // === Thinking Steps Generator ===
+    function getThinkingSteps(query) {
+        const q = query.toLowerCase();
+        const steps = [{ icon: '⚡', text: 'Parsing query intent...' }];
+        if (/mitre|att&ck|technique|tactic/.test(q))
+            steps.push({ icon: '🗂️', text: 'Querying MITRE ATT&CK framework...' });
+        if (/cve|vulnerabilit|exploit|patch|zero.?day/.test(q))
+            steps.push({ icon: '🔎', text: 'Searching NVD & CISA KEV catalog...' });
+        if (/ransomware|malware|apt|threat.?actor|campaign/.test(q))
+            steps.push({ icon: '🦠', text: 'Scanning threat intel databases...' });
+        if (/identity|oauth|saml|oidc|sso|mfa|entra|okta|fido|passkey/.test(q))
+            steps.push({ icon: '🔐', text: 'Analyzing identity protocol data...' });
+        if (/phish|social.?engineer|credential|password|brute/.test(q))
+            steps.push({ icon: '🎣', text: 'Reviewing attack vector intelligence...' });
+        if (/news|latest|recent|update|today|this week/.test(q))
+            steps.push({ icon: '📰', text: 'Pulling latest security headlines...' });
+        steps.push({ icon: '🌐', text: 'Executing Google Search grounding...' });
+        steps.push({ icon: '📡', text: 'Correlating multi-source intelligence...' });
+        steps.push({ icon: '🧠', text: 'Synthesizing reasoning chain...' });
+        steps.push({ icon: '✅', text: 'Compiling final response...' });
+        return steps;
+    }
+
+    function createThinkingPanel(query) {
+        const steps = getThinkingSteps(query);
+        const panel = document.createElement('div');
+        panel.className = 'g-thinking-panel';
+        const stepsHTML = steps.map((s, i) =>
+            `<div class="g-thinking-step" data-index="${i}"><span class="step-icon">${s.icon}</span> ${s.text}</div>`
+        ).join('');
+        panel.innerHTML = `
+            <div class="g-thinking-header">
+                <span class="g-thinking-spinner"></span>
+                REASONING ENGINE ACTIVE
+            </div>
+            <div class="g-thinking-steps">${stepsHTML}</div>
+            <div class="g-cursor-line"><span class="g-cursor"></span></div>
+        `;
+        return panel;
+    }
+
+    function animateThinkingSteps(panel) {
+        const stepEls = panel.querySelectorAll('.g-thinking-step');
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i >= stepEls.length) { clearInterval(interval); return; }
+            if (i > 0) {
+                stepEls[i - 1].classList.add('done');
+                const ico = stepEls[i - 1].querySelector('.step-icon');
+                if (ico) ico.textContent = '✓';
+            }
+            stepEls[i].classList.add('visible');
+            i++;
+            msgArea.scrollTop = msgArea.scrollHeight;
+        }, 650);
+        panel._interval = interval;
+    }
+
+    function completeThinking(panel, thinkingText) {
+        if (panel._interval) clearInterval(panel._interval);
+        panel.querySelectorAll('.g-thinking-step').forEach(el => {
+            el.classList.add('visible', 'done');
+            const ico = el.querySelector('.step-icon');
+            if (ico) ico.textContent = '✓';
+        });
+        const cursor = panel.querySelector('.g-cursor-line');
+        if (cursor) cursor.remove();
+        panel.classList.add('complete');
+        const hdr = panel.querySelector('.g-thinking-header');
+        if (hdr) hdr.innerHTML = '<span class="g-thinking-spinner"></span> REASONING COMPLETE';
+        if (thinkingText && thinkingText.trim()) {
+            const toggle = document.createElement('div');
+            toggle.className = 'g-reasoning-toggle';
+            toggle.innerHTML = '▸ View AI reasoning chain';
+            const content = document.createElement('div');
+            content.className = 'g-reasoning-content';
+            content.textContent = thinkingText.trim();
+            toggle.onclick = () => {
+                const exp = content.classList.toggle('expanded');
+                toggle.innerHTML = exp ? '▾ Hide AI reasoning chain' : '▸ View AI reasoning chain';
+                setTimeout(() => { msgArea.scrollTop = msgArea.scrollHeight; }, 50);
+            };
+            panel.appendChild(toggle);
+            panel.appendChild(content);
+        }
+    }
+
     // Send
     async function handleSend() {
         if (!isAuth) return;
@@ -390,13 +584,10 @@
         addMsg(q, 'user');
         input.value = '';
 
-        const loadId = 'g-load-' + Date.now();
-        const ldiv = document.createElement('div');
-        ldiv.className = 'g-msg bot';
-        ldiv.id = loadId;
-        ldiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gordie is checking around...';
-        msgArea.appendChild(ldiv);
+        const thinkPanel = createThinkingPanel(q);
+        msgArea.appendChild(thinkPanel);
         msgArea.scrollTop = msgArea.scrollHeight;
+        animateThinkingSteps(thinkPanel);
 
         try {
             const res = await fetch('mitre_bot.php', {
@@ -405,16 +596,14 @@
                 body: JSON.stringify({ message: q })
             });
             const data = await res.json();
-            const el = document.getElementById(loadId);
-            if (el) el.remove();
+            completeThinking(thinkPanel, data.thinking || '');
             if (data.status === 'success') {
                 addMsg(data.message, 'bot');
             } else {
                 addMsg(data.message || 'Connection error.', 'system');
             }
         } catch (e) {
-            const el = document.getElementById(loadId);
-            if (el) el.remove();
+            completeThinking(thinkPanel, '');
             addMsg('Uplink failed. Check your connection.', 'system');
         }
     }
