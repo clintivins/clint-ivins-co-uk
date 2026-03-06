@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomad-Approved Map | T3chN0mad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        #map-container {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+            margin-bottom: 50px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .map-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-family: 'Space Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-btn.active[data-filter="all"] {
+            border-color: white;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .filter-btn[data-filter="tech"] {
+            color: var(--neon-cyan);
+        }
+
+        .filter-btn.active[data-filter="tech"] {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        }
+
+        .filter-btn[data-filter="travel"] {
+            color: var(--neon-gold);
+        }
+
+        .filter-btn.active[data-filter="travel"] {
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .filter-btn[data-filter="taste"] {
+            color: #ff3366;
+        }
+
+        .filter-btn.active[data-filter="taste"] {
+            border-color: #ff3366;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.3);
+        }
+
+        /* Modal styling */
+        .pin-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 15, 0.95);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
+            padding: 2.5rem;
+            border-radius: 10px;
+            z-index: 1000;
+            display: none;
+            width: 90%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pin-modal h3 {
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pin-modal input,
+        .pin-modal select,
+        .pin-modal textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            border-radius: 5px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .pin-modal input:focus,
+        .pin-modal select:focus,
+        .pin-modal textarea:focus {
+            outline: none;
+            border-color: var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .pin-modal select option {
+            background: #0a0a0f;
+            color: white;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 1rem;
+            cursor: pointer;
+        }
+
+        /* Leaflet popup customization */
+        .leaflet-popup-content-wrapper {
+            background: rgba(10, 10, 15, 0.95) !important;
+            color: white !important;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(10, 10, 15, 0.95) !important;
+            border-top: 1px solid var(--neon-cyan) !important;
+            border-left: 1px solid var(--neon-cyan) !important;
+        }
+
+        .leaflet-popup-content h4 {
+            color: var(--neon-cyan);
+            margin: 0 0 5px 0;
+            font-size: 1.3rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .leaflet-popup-content .category-label {
+            font-size: 0.75rem;
+            color: var(--neon-gold);
+            margin-bottom: 10px;
+            font-family: 'Space Mono', monospace;
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .leaflet-popup-content p {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            color: #ddd;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .leaflet-container a.leaflet-popup-close-button {
+            color: var(--neon-cyan) !important;
+        }
+
+        .add-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid var(--neon-gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            color: var(--neon-gold);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            z-index: 500;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            }
+
+            100% {
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">T3ch<span class="highlight">N0mad</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="dashboard.html">Threat Intel</a></li>
+            <li><a href="academy.php">Academy</a></li>
+            <li><a href="nomad-map.html" class="highlight" style="text-shadow: 0 0 5px var(--neon-cyan);">NomMap</a>
+            </li>
+            <li><a href="#contact" class="btn-glow">Connect</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <main class="container" style="padding-top: 120px;">
+        <div class="content-text" style="text-align: center; max-width: 800px; margin: 0 auto 2rem auto;">
+            <h1 class="glitch" data-text="Nomad-Approved Map" style="font-size: 3rem; margin-bottom: 1rem;">
+                Nomad-Approved Map</h1>
+            <p style="font-size: 1.2rem; color: var(--text-muted);">
+                A community-built archive of remote-work sanctuaries. Drop a pin to share your favorite spot.
+            </p>
+        </div>
+
+        <div class="map-filters">
+            <button class="filter-btn active" data-filter="all"><i class="fas fa-globe"></i> All Spots</button>
+            <button class="filter-btn" data-filter="tech"><i class="fas fa-laptop-code"></i> Tech</button>
+            <button class="filter-btn" data-filter="travel"><i class="fas fa-plane-departure"></i> Travel</button>
+            <button class="filter-btn" data-filter="taste"><i class="fas fa-utensils"></i> Taste</button>
+        </div>
+
+        <div id="map-container">
+            <div id="map"></div>
+            <div class="add-hint"><i class="fas fa-hand-pointer"></i> Click anywhere on the map to add a spot</div>
+
+            <!-- Custom Modal -->
+            <div id="pinModal" class="pin-modal">
+                <h3><i class="fas fa-map-marker-alt"></i> Add Nomad Spot</h3>
+                <input type="text" id="spotName" placeholder="Spot Name (e.g. Cyber Cafe)" required autocomplete="off">
+                <select id="spotCategory">
+                    <option value="tech">Tech (Wi-Fi, Power, Coffee)</option>
+                    <option value="travel">Travel (Quiet, Epic workspace)</option>
+                    <option value="taste">Taste (Remote-friendly lunch)</option>
+                </select>
+                <textarea id="spotDesc" placeholder="Why is this spot Nomad-Approved?" rows="4" required></textarea>
+                <div class="modal-buttons">
+                    <button id="savePinBtn" class="btn-glow"><i class="fas fa-save"></i> Save</button>
+                    <button id="cancelPinBtn" class="btn-outline">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            const burger = document.querySelector('.burger');
+            const nav = document.querySelector('.nav-links');
+            if (burger) {
+                burger.addEventListener('click', () => {
+                    nav.classList.toggle('nav-active');
+                    burger.classList.toggle('toggle');
+                });
+            }
+
+            // Init Map centered globally
+            const map = L.map('map').setView([20, 0], 2);
+
+            // Dark CartoDB basemap for cyberpunk feel
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Icon creators
+            const createIcon = (iconClass, color) => {
+                return L.divIcon({
+                    html: `<div style="color: ${color}; text-shadow: 0 0 10px ${color}; font-size: 28px;">
+                            <i class="${iconClass}"></i>
+                           </div>`,
+                    className: 'custom-leaflet-icon',
+                    iconSize: [28, 28],
+                    iconAnchor: [14, 28],
+                    popupAnchor: [0, -28]
+                });
+            };
+
+            const icons = {
+                tech: createIcon('fas fa-laptop-code', 'var(--neon-cyan)'), // Cyan
+                travel: createIcon('fas fa-plane-departure', 'var(--neon-gold)'), // Gold
+                taste: createIcon('fas fa-utensils', '#ff3366') // Hot Pink
+            };
+
+            let allMarkers = [];
+            let tempMarker = null;
+            let currentLatLng = null;
+
+            const modal = document.getElementById('pinModal');
+            const nameInput = document.getElementById('spotName');
+            const categorySelect = document.getElementById('spotCategory');
+            const descInput = document.getElementById('spotDesc');
+            const saveBtn = document.getElementById('savePinBtn');
+            const cancelBtn = document.getElementById('cancelPinBtn');
+
+            // Fetch and render pins
+            async function fetchPins() {
+                try {
+                    const response = await fetch('map_api.php');
+                    const pins = await response.json();
+
+                    // Clear existing markers
+                    allMarkers.forEach(item => map.removeLayer(item.marker));
+                    allMarkers = [];
+
+                    // Add markers to map
+                    pins.forEach(pin => {
+                        const icon = icons[pin.category] || icons.tech;
+
+                        // Icon mapping for display string
+                        let labelIcon = '';
+                        if (pin.category === 'tech') labelIcon = '<i class="fas fa-laptop-code" style="margin-right:5px"></i> TECH';
+                        else if (pin.category === 'travel') labelIcon = '<i class="fas fa-plane" style="margin-right:5px"></i> TRAVEL';
+                        else if (pin.category === 'taste') labelIcon = '<i class="fas fa-utensils" style="margin-right:5px"></i> TASTE';
+
+                        const marker = L.marker([pin.lat, pin.lng], { icon: icon })
+                            .bindPopup(`
+                                <h4>${pin.name}</h4>
+                                <div class="category-label">${labelIcon}</div>
+                                <p>${pin.description}</p>
+                            `);
+
+                        marker.addTo(map);
+                        allMarkers.push({ category: pin.category, marker: marker });
+                    });
+
+                    // Apply current filter
+                    applyFilter(document.querySelector('.filter-btn.active').getAttribute('data-filter'));
+
+                } catch (err) {
+                    console.error('Failed to load map pins:', err);
+                }
+            }
+
+            // Click map to drop pin
+            map.on('click', (e) => {
+                currentLatLng = e.latlng;
+
+                if (tempMarker) map.removeLayer(tempMarker);
+
+                tempMarker = L.marker(currentLatLng, {
+                    icon: createIcon('fas fa-map-pin', '#fff')
+                }).addTo(map);
+
+                // Reset and show modal
+                nameInput.value = '';
+                descInput.value = '';
+                modal.style.display = 'block';
+                nameInput.focus();
+            });
+
+            // Cancel button
+            cancelBtn.onclick = () => {
+                modal.style.display = 'none';
+                if (tempMarker) {
+                    map.removeLayer(tempMarker);
+                    tempMarker = null;
+                }
+            };
+
+            // Save pin
+            saveBtn.onclick = async () => {
+                const name = nameInput.value.trim();
+                const desc = descInput.value.trim();
+                const category = categorySelect.value;
+
+                if (!name || !desc) {
+                    alert('Please provide a name and description.');
+                    return;
+                }
+
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                const newPin = {
+                    name: name,
+                    category: category,
+                    description: desc,
+                    lat: currentLatLng.lat,
+                    lng: currentLatLng.lng
+                };
+
+                try {
+                    const response = await fetch('map_api.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newPin)
+                    });
+
+                    if (response.ok) {
+                        modal.style.display = 'none';
+                        if (tempMarker) map.removeLayer(tempMarker);
+                        tempMarker = null;
+                        await fetchPins(); // Reload all pins
+                    } else {
+                        alert('Failed to save pin.');
+                    }
+                } catch (err) {
+                    console.error('Error saving pin:', err);
+                    alert('Error saving pin.');
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+                }
+            };
+
+            // Filters
+            function applyFilter(filter) {
+                allMarkers.forEach(item => {
+                    if (filter === 'all' || item.category === filter) {
+                        if (!map.hasLayer(item.marker)) map.addLayer(item.marker);
+                    } else {
+                        if (map.hasLayer(item.marker)) map.removeLayer(item.marker);
+                    }
+                });
+            }
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    applyFilter(e.currentTarget.getAttribute('data-filter'));
+                });
+            });
+
+            // Initial load
+            fetchPins();
+        });
+    </script>
+</body>
+
+</html>
