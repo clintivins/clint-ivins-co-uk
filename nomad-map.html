@@ -13,12 +13,6 @@
     <link rel="stylesheet" href="style.css?v=2.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-    <!-- Leaflet Geocoder CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-
     <style>
         .map-layout {
             display: flex;
@@ -158,7 +152,7 @@
 
         /* Modal styling */
         .pin-modal {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -167,7 +161,7 @@
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
             padding: 2.5rem;
             border-radius: 10px;
-            z-index: 1000;
+            z-index: 2000;
             display: none;
             width: 90%;
             max-width: 450px;
@@ -220,53 +214,6 @@
             cursor: pointer;
         }
 
-        /* Leaflet popup customization */
-        .leaflet-popup-content-wrapper {
-            background: rgba(10, 10, 15, 0.95) !important;
-            color: white !important;
-            border: 1px solid var(--neon-cyan);
-            border-radius: 5px;
-            backdrop-filter: blur(5px);
-        }
-
-        .leaflet-popup-tip {
-            background: rgba(10, 10, 15, 0.95) !important;
-            border-top: 1px solid var(--neon-cyan) !important;
-            border-left: 1px solid var(--neon-cyan) !important;
-        }
-
-        .leaflet-popup-content h4 {
-            color: var(--neon-cyan);
-            margin: 0 0 5px 0;
-            font-size: 1.3rem;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .leaflet-popup-content .category-label {
-            font-size: 0.75rem;
-            color: var(--neon-gold);
-            margin-bottom: 10px;
-            font-family: 'Space Mono', monospace;
-            display: inline-block;
-            padding: 2px 8px;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .leaflet-popup-content p {
-            margin: 0;
-            font-family: 'Outfit', sans-serif;
-            color: #ddd;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .leaflet-container a.leaflet-popup-close-button {
-            color: var(--neon-cyan) !important;
-        }
-
         .add-hint {
             position: absolute;
             bottom: 20px;
@@ -299,6 +246,95 @@
                 opacity: 0.7;
             }
         }
+
+        /* Search Bar */
+        #pac-input {
+            background-color: #fff;
+            color: #000;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 300;
+            margin-top: 10px;
+            padding: 10px 15px;
+            text-overflow: ellipsis;
+            width: 80%;
+            max-width: 400px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            border-radius: 5px;
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #pac-input:focus {
+            border-color: var(--neon-gold);
+            outline: none;
+        }
+
+        /* Google Maps popup customization */
+        .gm-style-iw {
+            background-color: #fff !important;
+            color: #000 !important;
+            border-radius: 5px !important;
+            padding: 10px !important;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .gm-style-iw-d {
+            overflow: auto !important;
+        }
+
+        .gm-ui-hover-effect {
+            top: 5px !important;
+            right: 5px !important;
+        }
+
+        .gmap-popup-content h4 {
+            color: #000;
+            margin: 0 0 5px 0;
+            font-size: 1.3rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .gmap-popup-content .category-label {
+            font-size: 0.75rem;
+            color: var(--neon-gold);
+            margin-bottom: 10px;
+            font-family: 'Space Mono', monospace;
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .gmap-popup-content .category-label.tech {
+            color: #00bcd4;
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .gmap-popup-content .category-label.travel {
+            color: #ffb300;
+            background: rgba(255, 179, 0, 0.1);
+        }
+
+        .gmap-popup-content .category-label.taste {
+            color: #ff3366;
+            background: rgba(255, 51, 102, 0.1);
+        }
+
+        .gmap-popup-content p {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -327,7 +363,7 @@
             <h1 class="glitch" data-text="Nomad-Approved Map" style="font-size: 3rem; margin-bottom: 1rem;">
                 Nomad-Approved Map</h1>
             <p style="font-size: 1.2rem; color: var(--text-muted);">
-                A community-built archive of remote-work sanctuaries. Drop a pin to share your favorite spot.
+                A community-built archive of remote-work sanctuaries. Drop a pin or search a place to share it.
             </p>
         </div>
 
@@ -355,8 +391,10 @@
 
             <!-- Map Container -->
             <div id="map-container">
+                <input id="pac-input" class="controls" type="text"
+                    placeholder="Search Google Maps (e.g. Costa Coffee, London)..." />
                 <div id="map"></div>
-                <div class="add-hint"><i class="fas fa-hand-pointer"></i> Click anywhere on the map to drop a pin</div>
+                <div class="add-hint"><i class="fas fa-search"></i> Search a place or click map to add a spot</div>
 
                 <!-- Custom Modal -->
                 <div id="pinModal" class="pin-modal">
@@ -376,20 +414,19 @@
                 </div>
             </div>
         </div>
-        </div>
     </main>
 
     <footer>
         <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
     </footer>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <!-- Leaflet Geocoder JS -->
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <!-- Google Maps API - NOTE: You MUST replace YOUR_API_KEY_HERE with an actual Google Maps API Key with Places API enabled -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places&callback=initMap" async
+        defer></script>
+
     <script>
+        // Mobile Menu Toggle
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile Menu Toggle
             const burger = document.querySelector('.burger');
             const nav = document.querySelector('.nav-links');
             if (burger) {
@@ -398,218 +435,246 @@
                     burger.classList.toggle('toggle');
                 });
             }
+        });
 
+        let map;
+        let allMarkers = [];
+        let rawPins = [];
+        let infoWindow;
+        let tempMarker = null;
+        let currentLatLng = null;
+
+        const modal = document.getElementById('pinModal');
+        const nameInput = document.getElementById('spotName');
+        const categorySelect = document.getElementById('spotCategory');
+        const descInput = document.getElementById('spotDesc');
+        const saveBtn = document.getElementById('savePinBtn');
+        const cancelBtn = document.getElementById('cancelPinBtn');
+        const placesList = document.getElementById('places-list');
+        const spotCount = document.getElementById('spot-count');
+
+        // Custom marker icons 
+        const getMarkerIcon = (category) => {
+            let color = '#FF0000'; // Default Red
+            if (category === 'tech') color = '#00FFFF'; // Cyan
+            if (category === 'travel') color = '#FFD700'; // Gold
+            if (category === 'taste') color = '#FF3366'; // Pink
+
+            return {
+                path: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+                fillColor: color,
+                fillOpacity: 1,
+                strokeWeight: 1,
+                strokeColor: '#000',
+                scale: 1.5,
+                anchor: new google.maps.Point(12, 22)
+            };
+        };
+
+        function initMap() {
             // Init Map centered on the UK
-            const map = L.map('map').setView([54.5, -3.2], 6);
-
-            // Dark CartoDB basemap for cyberpunk feel
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
-
-            // Add Geocoder Search Control (Search by Area/Postcode)
-            const geocoder = L.Control.geocoder({
-                defaultMarkGeocode: false,
-                position: 'topleft',
-                placeholder: 'Search UK (City, Postcode)...',
-                errorMessage: 'Nothing found.',
-                geocoder: L.Control.Geocoder.nominatim({
-                    geocodingQueryParams: {
-                        countrycodes: 'gb' // Restrict to UK
-                    }
-                })
-            }).on('markgeocode', function (e) {
-                const bbox = e.geocode.bbox;
-                const poly = L.polygon([
-                    bbox.getSouthEast(),
-                    bbox.getNorthEast(),
-                    bbox.getNorthWest(),
-                    bbox.getSouthWest()
-                ]);
-                map.fitBounds(poly.getBounds());
-            }).addTo(map);
-
-            // Icon creators
-            const createIcon = (iconClass, color) => {
-                return L.divIcon({
-                    html: `<div style="color: ${color}; text-shadow: 0 0 10px ${color}; font-size: 28px;">
-                            <i class="${iconClass}"></i>
-                           </div>`,
-                    className: 'custom-leaflet-icon',
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 28],
-                    popupAnchor: [0, -28]
-                });
-            };
-
-            const icons = {
-                tech: createIcon('fas fa-laptop-code', 'var(--neon-cyan)'), // Cyan
-                travel: createIcon('fas fa-plane-departure', 'var(--neon-gold)'), // Gold
-                taste: createIcon('fas fa-utensils', '#ff3366') // Hot Pink
-            };
-
-            let allMarkers = [];
-            let tempMarker = null;
-            let currentLatLng = null;
-
-            const modal = document.getElementById('pinModal');
-            const nameInput = document.getElementById('spotName');
-            const categorySelect = document.getElementById('spotCategory');
-            const descInput = document.getElementById('spotDesc');
-            const saveBtn = document.getElementById('savePinBtn');
-            const cancelBtn = document.getElementById('cancelPinBtn');
-            const placesList = document.getElementById('places-list');
-            const spotCount = document.getElementById('spot-count');
-
-            let rawPins = [];
-
-            // Fetch and render pins
-            async function fetchPins() {
-                try {
-                    const response = await fetch('map_api.php');
-                    rawPins = await response.json();
-                    renderPinsAndSidebar('all');
-                } catch (err) {
-                    console.error('Failed to load map pins:', err);
-                }
-            }
-
-            function renderPinsAndSidebar(filter) {
-                // Clear map markers
-                allMarkers.forEach(item => map.removeLayer(item.marker));
-                allMarkers = [];
-                // Clear sidebar
-                placesList.innerHTML = '';
-
-                let count = 0;
-
-                rawPins.forEach(pin => {
-                    if (filter !== 'all' && pin.category !== filter) return;
-
-                    count++;
-                    const icon = icons[pin.category] || icons.tech;
-
-                    let labelIcon = '';
-                    let color = '';
-                    if (pin.category === 'tech') { labelIcon = '<i class="fas fa-laptop-code" style="margin-right:5px"></i> TECH'; color = 'var(--neon-cyan)'; }
-                    else if (pin.category === 'travel') { labelIcon = '<i class="fas fa-plane" style="margin-right:5px"></i> TRAVEL'; color = 'var(--neon-gold)'; }
-                    else if (pin.category === 'taste') { labelIcon = '<i class="fas fa-utensils" style="margin-right:5px"></i> TASTE'; color = '#ff3366'; }
-
-                    const marker = L.marker([pin.lat, pin.lng], { icon: icon })
-                        .bindPopup(`
-                            <h4>${pin.name}</h4>
-                            <div class="category-label">${labelIcon}</div>
-                            <p>${pin.description}</p>
-                        `);
-
-                    marker.addTo(map);
-                    allMarkers.push({ category: pin.category, marker: marker });
-
-                    // Add to sidebar
-                    const item = document.createElement('div');
-                    item.className = 'sidebar-item';
-                    item.innerHTML = `
-                        <div style="font-size: 0.75rem; color: ${color}; margin-bottom: 5px; font-family: 'Space Mono', monospace; font-weight: bold;">${labelIcon}</div>
-                        <h4>${pin.name}</h4>
-                        <p style="font-size: 0.9rem; color: #ccc; margin: 0; line-height: 1.4;">${pin.description.substring(0, 60)}${pin.description.length > 60 ? '...' : ''}</p>
-                    `;
-                    item.onclick = () => {
-                        map.flyTo([pin.lat, pin.lng], 14);
-                        if (window.innerWidth > 768) {
-                            marker.openPopup();
-                        }
-                    };
-                    placesList.appendChild(item);
-                });
-
-                spotCount.textContent = count;
-            }
-
-            // Click map to drop pin
-            map.on('click', (e) => {
-                currentLatLng = e.latlng;
-
-                if (tempMarker) map.removeLayer(tempMarker);
-
-                tempMarker = L.marker(currentLatLng, {
-                    icon: createIcon('fas fa-map-pin', '#fff')
-                }).addTo(map);
-
-                // Reset and show modal
-                nameInput.value = '';
-                descInput.value = '';
-                modal.style.display = 'block';
-                nameInput.focus();
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 54.5, lng: -3.2 },
+                zoom: 6,
+                // Bright default styling (standard Google Maps style)
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: true
             });
 
-            // Cancel button
-            cancelBtn.onclick = () => {
-                modal.style.display = 'none';
-                if (tempMarker) {
-                    map.removeLayer(tempMarker);
-                    tempMarker = null;
-                }
-            };
+            infoWindow = new google.maps.InfoWindow();
 
-            // Save pin
-            saveBtn.onclick = async () => {
-                const name = nameInput.value.trim();
-                const desc = descInput.value.trim();
-                const category = categorySelect.value;
+            // Places Autocomplete
+            const input = document.getElementById('pac-input');
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
 
-                if (!name || !desc) {
-                    alert('Please provide a name and description.');
+            autocomplete.addListener('place_changed', () => {
+                infoWindow.close();
+                const place = autocomplete.getPlace();
+
+                if (!place.geometry || !place.geometry.location) {
+                    window.alert("No details available for input: '" + place.name + "'");
                     return;
                 }
 
-                saveBtn.disabled = true;
-                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-                const newPin = {
-                    name: name,
-                    category: category,
-                    description: desc,
-                    lat: currentLatLng.lat,
-                    lng: currentLatLng.lng
-                };
-
-                try {
-                    const response = await fetch('map_api.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(newPin)
-                    });
-
-                    if (response.ok) {
-                        modal.style.display = 'none';
-                        if (tempMarker) map.removeLayer(tempMarker);
-                        tempMarker = null;
-                        await fetchPins(); // Reload all pins
-                    } else {
-                        alert('Failed to save pin.');
-                    }
-                } catch (err) {
-                    console.error('Error saving pin:', err);
-                    alert('Error saving pin.');
-                } finally {
-                    saveBtn.disabled = false;
-                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
                 }
-            };
 
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    e.currentTarget.classList.add('active');
-                    renderPinsAndSidebar(e.currentTarget.getAttribute('data-filter'));
-                });
+                // Prompt user to add this place
+                currentLatLng = place.geometry.location;
+                openModalForSpot(place.name);
             });
 
-            // Initial load
+            // Map Click to drop a pin manually
+            map.addListener('click', (e) => {
+                currentLatLng = e.latLng;
+                openModalForSpot('');
+            });
+
+            // Fetch and render existing pins
             fetchPins();
+        }
+
+        function openModalForSpot(prefilledName) {
+            if (tempMarker) tempMarker.setMap(null);
+
+            tempMarker = new google.maps.Marker({
+                position: currentLatLng,
+                map: map,
+                icon: getMarkerIcon('default')
+            });
+
+            nameInput.value = prefilledName;
+            descInput.value = '';
+            modal.style.display = 'block';
+            nameInput.focus();
+        }
+
+        // Fetch and render pins
+        async function fetchPins() {
+            try {
+                const response = await fetch('map_api.php');
+                rawPins = await response.json();
+                renderPinsAndSidebar('all');
+            } catch (err) {
+                console.error('Failed to load map pins:', err);
+            }
+        }
+
+        function renderPinsAndSidebar(filter) {
+            // Clear map markers
+            allMarkers.forEach(item => item.marker.setMap(null));
+            allMarkers = [];
+
+            // Clear sidebar
+            placesList.innerHTML = '';
+
+            let count = 0;
+
+            rawPins.forEach(pin => {
+                if (filter !== 'all' && pin.category !== filter) return;
+
+                count++;
+
+                let labelIcon = '';
+                let colorClass = '';
+                let colorHex = '';
+                if (pin.category === 'tech') { labelIcon = '<i class="fas fa-laptop-code" style="margin-right:5px"></i> TECH'; colorClass = 'tech'; colorHex = '#00FFFF'; }
+                else if (pin.category === 'travel') { labelIcon = '<i class="fas fa-plane" style="margin-right:5px"></i> TRAVEL'; colorClass = 'travel'; colorHex = '#FFD700'; }
+                else if (pin.category === 'taste') { labelIcon = '<i class="fas fa-utensils" style="margin-right:5px"></i> TASTE'; colorClass = 'taste'; colorHex = '#FF3366'; }
+
+                const latLng = new google.maps.LatLng(pin.lat, pin.lng);
+
+                const marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: pin.name,
+                    icon: getMarkerIcon(pin.category)
+                });
+
+                const contentString = `
+                    <div class="gmap-popup-content">
+                        <h4>${pin.name}</h4>
+                        <div class="category-label ${colorClass}">${labelIcon}</div>
+                        <p>${pin.description}</p>
+                    </div>
+                `;
+
+                marker.addListener('click', () => {
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, marker);
+                });
+
+                allMarkers.push({ category: pin.category, marker: marker });
+
+                // Add to sidebar
+                const item = document.createElement('div');
+                item.className = 'sidebar-item';
+                item.innerHTML = `
+                    <div style="font-size: 0.75rem; color: ${colorHex}; margin-bottom: 5px; font-family: 'Space Mono', monospace; font-weight: bold;">${labelIcon}</div>
+                    <h4>${pin.name}</h4>
+                    <p style="font-size: 0.9rem; color: #ccc; margin: 0; line-height: 1.4;">${pin.description.substring(0, 60)}${pin.description.length > 60 ? '...' : ''}</p>
+                `;
+                item.onclick = () => {
+                    map.setCenter(latLng);
+                    map.setZoom(15);
+                    infoWindow.setContent(contentString);
+                    infoWindow.open(map, marker);
+                };
+                placesList.appendChild(item);
+            });
+
+            spotCount.textContent = count;
+        }
+
+        // Cancel button
+        cancelBtn.onclick = () => {
+            modal.style.display = 'none';
+            if (tempMarker) tempMarker.setMap(null);
+            tempMarker = null;
+        };
+
+        // Save pin
+        saveBtn.onclick = async () => {
+            const name = nameInput.value.trim();
+            const desc = descInput.value.trim();
+            const category = categorySelect.value;
+
+            if (!name || !desc) {
+                alert('Please provide a name and description.');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const newPin = {
+                name: name,
+                category: category,
+                description: desc,
+                lat: currentLatLng.lat(),
+                lng: currentLatLng.lng()
+            };
+
+            try {
+                const response = await fetch('map_api.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newPin)
+                });
+
+                if (response.ok) {
+                    modal.style.display = 'none';
+                    if (tempMarker) tempMarker.setMap(null);
+                    tempMarker = null;
+                    document.getElementById('pac-input').value = '';
+                    await fetchPins(); // Reload all pins
+                } else {
+                    alert('Failed to save pin.');
+                }
+            } catch (err) {
+                console.error('Error saving pin:', err);
+                alert('Error saving pin.');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save';
+            }
+        };
+
+        // Filter Buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.currentTarget.classList.add('active');
+                renderPinsAndSidebar(e.currentTarget.getAttribute('data-filter'));
+            });
         });
+
     </script>
 </body>
 
