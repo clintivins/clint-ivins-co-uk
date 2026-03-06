@@ -1,3 +1,7 @@
+<?php
+require_once 'secrets.php';
+$google_maps_key = defined('GOOGLE_MAPS_API_KEY') ? GOOGLE_MAPS_API_KEY : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -420,9 +424,10 @@
         <p>&copy; 2026 Clinton Ivins. All Rights Reserved.</p>
     </footer>
 
-    <!-- Google Maps API - NOTE: You MUST replace YOUR_API_KEY_HERE with an actual Google Maps API Key with Places API enabled -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=273412645574&libraries=places&callback=initMap" async
-        defer></script>
+    <!-- Google Maps API - Securely loaded -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo htmlspecialchars($google_maps_key); ?>&libraries=places&callback=initMap"
+        async defer></script>
 
     <script>
         // Mobile Menu Toggle

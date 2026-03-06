@@ -17,24 +17,22 @@ ftp.prot_p()
 # Set passive mode
 ftp.set_pasv(True)
 
+for d in ['public_html', 'htdocs', 'httpdocs', 'www', 'web']:
+    try:
+        ftp.cwd(d)
+        break
+    except:
+        pass
+
 files_to_upload = [
     'index.html',
-    'nomad-map.html',
-    'map_api.php',
-    'locations.json'
+    'nomad-map.php'
 ]
 
 for file in files_to_upload:
     with open(f"/Users/clint/Documents/clint-ivins-co-uk/{file}", 'rb') as f:
         ftp.storbinary(f'STOR {file}', f)
         print(f'Successfully uploaded {file}')
-
-# Attempt to change permissions for locations.json so PHP can write to it
-try:
-    ftp.sendcmd('SITE CHMOD 666 locations.json')
-    print('Permissions updated for locations.json')
-except Exception as e:
-    print('Could not change permissions for locations.json. It might already have correct permissions, or FTP server does not support SITE CHMOD.', e)
 
 ftp.quit()
 print('Deployment complete!')
