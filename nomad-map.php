@@ -351,8 +351,7 @@ $google_maps_key = defined('GOOGLE_MAPS_API_KEY') ? GOOGLE_MAPS_API_KEY : '';
             <li><a href="about.html">About</a></li>
             <li><a href="dashboard.html">Threat Intel</a></li>
             <li><a href="academy.php">Academy</a></li>
-            <li><a href="nomad-map.html" class="highlight" style="text-shadow: 0 0 5px var(--neon-cyan);">NomMap</a>
-            </li>
+            <li><a href="nomad-map.php" class="highlight" style="text-shadow: 0 0 5px var(--neon-cyan);">NomMap</a></li>
             <li><a href="#contact" class="btn-glow">Connect</a></li>
         </ul>
         <div class="burger">
